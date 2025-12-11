@@ -194,7 +194,7 @@ const WhatsAppSimulator = () => {
         ></div>
         <div className="absolute inset-0 bg-black opacity-30 pointer-events-none z-0"></div>
 
-        <div className="absolute inset-0 overflow-y-auto p-4 space-y-3 z-10">
+        <div className="absolute inset-0 overflow-y-auto p-4 space-y-3 z-10 scrollbar-hide">
           <div className="flex justify-center mb-4">
             <span className="bg-[#1f2c34] text-gray-300 text-xs py-1 px-3 rounded-lg uppercase font-medium">
               Hoje
