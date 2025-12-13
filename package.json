@@ -11,6 +11,11 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
+    "@tsparticles/engine": "^3.9.1",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.9.1",
+    "framer-motion": "^12.23.26",
+    "gsap": "^3.14.1",
     "lucide-react": "^0.560.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
