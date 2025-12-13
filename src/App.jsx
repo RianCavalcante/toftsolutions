@@ -6,11 +6,12 @@ import { ThreeDMarquee } from './components/ui/ThreeDMarquee';
 import { BackgroundBeams } from './components/ui/BackgroundBeams';
 import { EvervaultCard, Icon } from './components/ui/EvervaultCard';
 import { StickyScrollWithProgress } from './components/ui/StickyScrollReveal';
+import { ShimmerText } from './components/ui/TypewriterEffect';
 import { 
   Send, MoreVertical, Search, Paperclip, Mic, CheckCheck, Smile, 
   Menu, X, Zap, Clock, TrendingUp, Shield, MessageSquare, ChevronRight,
   Bot, BarChart3, Globe, Sparkles, Cpu, Users, ArrowRight, Play, 
-  Lock, Fingerprint, Award, Rocket
+  Lock, Fingerprint, Award, Rocket, Video
 } from 'lucide-react';
 
 // Registrar plugin GSAP
@@ -582,7 +583,7 @@ const PremiumBenefitsSection = () => {
             <span className="bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text text-transparent">falam por si</span>
           </h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto font-light">
-            Números reais de empresas que transformaram seu atendimento com nossa tecnologia.
+            O que nossa tecnologia entrega em cada projeto de automação.
           </p>
         </div>
 
@@ -746,11 +747,12 @@ const AboutSection = () => {
 const App = () => {
   const [loading, setLoading] = useState(true);
   const parallaxOffset = useParallax(0.1);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
   return (
     <>
       <Preloader onComplete={() => setLoading(false)} />
-      <div className={`min-h-screen bg-[#000000] font-sans selection:bg-white/20 text-white overflow-x-hidden ${loading ? 'h-screen overflow-hidden' : ''}`}>
+      <div className={`min-h-screen bg-[#000000] font-sans selection:bg-white/20 text-white overflow-x-hidden ${loading ? 'h-screen overflow-hidden' : ''} ${isScheduleOpen ? 'blur-sm' : ''}`}>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap');
           .font-serif { font-family: 'Instrument Serif', serif; }
@@ -781,12 +783,17 @@ const App = () => {
                     Atenda seus clientes em <Cover>velocidade máxima</Cover>
                   </h1>
                 </div>
-                <p className="text-lg text-gray-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light">Do primeiro 'oi' ao fechamento do contrato. Elimine o trabalho manual e escale suas vendas com inteligência artificial.</p>
+                <p className="text-lg text-gray-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light overflow-hidden">
+                  <ShimmerText>Atendimento inteligente que converte. Enquanto você foca no que importa, nossa IA qualifica, responde e agenda reuniões automaticamente.</ShimmerText>
+                </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-                  <button className="px-6 py-3 bg-white text-black rounded-full font-semibold text-base hover:bg-gray-100 transition-all flex items-center justify-center gap-2 group">
-                    <span className="flex items-center gap-2">Começar Agora <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" /></span>
+                  <button 
+                    onClick={() => document.getElementById('agendar')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="px-6 py-3 bg-white text-black rounded-full font-semibold text-base hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_-5px_rgba(16,185,129,0.4)]"
+                  >
+                    <span className="flex items-center gap-2">Agendar Agora <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" /></span>
                   </button>
-                  <button className="px-6 py-3 bg-transparent border border-white/20 text-white rounded-full font-semibold text-base hover:bg-white/5 transition-all flex items-center justify-center gap-2"><Play size={16} fill="currentColor" /> Ver Case Real</button>
+                  <button className="px-6 py-3 bg-transparent text-white border border-white/20 rounded-full font-semibold text-base hover:bg-white/5 transition-all flex items-center justify-center gap-2">Ver Como Funciona</button>
                 </div>
               </div>
               <div className="flex-1 w-full max-w-xl lg:max-w-none perspective-1000 relative mt-8 lg:mt-0 flex justify-center lg:justify-end">
@@ -821,13 +828,94 @@ const App = () => {
 
         <div className="relative z-20 w-full"><TechMarquee /></div>
         <AboutSection />
+        
+        {/* Scheduling Section */}
+        <section id="agendar" className="py-24 relative bg-[#000000] border-t border-white/5">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#050505] to-[#000000] pointer-events-none"></div>
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-6xl font-medium mb-6 tracking-tight leading-tight text-white">
+                Agende sua <span className="text-emerald-500 font-serif italic">Demonstração</span>
+              </h2>
+              <p className="text-gray-500 text-lg max-w-2xl mx-auto font-light">
+                Veja na prática como nossa automação pode transformar o atendimento da sua empresa.
+              </p>
+            </div>
 
-        <section className="py-24 relative overflow-hidden bg-[#000000]">
-          <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-            <h2 className="text-4xl md:text-6xl font-medium mb-8 tracking-tight leading-tight">Pare de perder vendas por <br/> <span className="font-serif italic font-normal text-gray-500">demora no atendimento.</span></h2>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-200 transition-all transform hover:scale-105 shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)]">Agendar Consultoria</button>
-              <p className="text-xs text-gray-500 mt-4 sm:mt-0 sm:absolute sm:-bottom-10">Análise gratuita • Sem compromisso</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* Card 1: Demonstração Online */}
+              <div className="group bg-[#0A0A0A] rounded-3xl p-8 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 flex flex-col items-center text-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-300">
+                  <Video size={28} className="text-gray-400 group-hover:text-emerald-400 transition-colors" />
+                </div>
+                
+                <h3 className="text-xl font-medium text-white mb-2">Demonstração Online</h3>
+                <p className="text-gray-500 text-sm mb-6 font-light">Reunião de 30 minutos via Google Meet</p>
+                
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-gray-400 text-xs font-medium mb-8 group-hover:border-emerald-500/20 group-hover:text-emerald-400/80 transition-colors">
+                  <Clock size={12} /> 30 min
+                </div>
+                
+                <div className="w-full space-y-3 mb-8 text-left pl-4 border-l border-white/5 group-hover:border-emerald-500/20 transition-colors">
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Apresentação personalizada
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Análise do seu negócio
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Proposta sob medida
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setIsScheduleOpen(true)}
+                  className="w-full py-4 bg-white text-black rounded-xl font-bold text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-2 group/btn relative z-10"
+                >
+                  Agendar Agora <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                </button>
+              </div>
+
+              {/* Card 2: Consultoria WhatsApp */}
+              <div className="group bg-[#0A0A0A] rounded-3xl p-8 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 flex flex-col items-center text-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-300">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" className="text-gray-400 group-hover:text-emerald-400 transition-colors">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                </div>
+                
+                <h3 className="text-xl font-medium text-white mb-2">Consultoria via WhatsApp</h3>
+                <p className="text-gray-500 text-sm mb-6 font-light">Conversa direta com nosso especialista</p>
+                
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-gray-400 text-xs font-medium mb-8 group-hover:border-emerald-500/20 group-hover:text-emerald-400/80 transition-colors">
+                  <Zap size={12} /> Imediato
+                </div>
+                
+                <div className="w-full space-y-3 mb-8 text-left pl-4 border-l border-white/5 group-hover:border-emerald-500/20 transition-colors">
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Resposta rápida
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Diagnóstico inicial
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Orientações personalizadas
+                  </div>
+                </div>
+
+                <a 
+                  href="https://wa.me/5585991872205?text=Ol%C3%A1%20gostaria%20de%20tirar%20mais%20duvidas"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-4 bg-transparent border border-white/20 text-white rounded-xl font-bold text-sm hover:border-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-400 transition-all flex items-center justify-center gap-2 group/btn relative z-10"
+                >
+                  Falar no WhatsApp <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -855,6 +943,36 @@ const App = () => {
           </div>
         </footer>
       </div>
+
+      {/* Booking Modal */}
+      {isScheduleOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsScheduleOpen(false)}></div>
+          <div className="bg-[#111] w-full max-w-4xl h-[85vh] rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-300">
+            <div className="flex justify-between items-center p-4 border-b border-white/5 bg-[#111]">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <span className="ml-2 text-xs text-gray-500 font-mono">cal.com/toftsolutionsai</span>
+              </div>
+              <button onClick={() => setIsScheduleOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                <X size={20} className="text-gray-400" />
+              </button>
+            </div>
+            <div className="flex-1 w-full h-full bg-white relative">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <iframe 
+                src="https://cal.com/toftsolutionsai?theme=dark" 
+                className="w-full h-full border-0 relative z-10 bg-[#111]"
+                allow="camera; microphone; autoplay; encrypted-media"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
