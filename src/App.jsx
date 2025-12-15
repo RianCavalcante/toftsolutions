@@ -300,8 +300,8 @@ const WhatsAppSimulator = () => {
           </div>
         </div>
         <div className="flex items-center gap-4 text-gray-400">
-          <Search size={18} className="cursor-pointer hover:text-white" />
-          <MoreVertical size={18} className="cursor-pointer hover:text-white" />
+          <Search size={18} className="cursor-pointer hover:text-white" role="button" aria-label="Pesquisar" />
+          <MoreVertical size={18} className="cursor-pointer hover:text-white" role="button" aria-label="Mais opções" />
         </div>
       </div>
       <div className="flex-1 relative bg-[#0b141a] overflow-hidden flex flex-col">
@@ -321,13 +321,13 @@ const WhatsAppSimulator = () => {
           {isBotTyping && (<div className="flex w-full justify-start relative animate-fade-in"><div className="bg-[#202c33] p-2 rounded-xl rounded-tl-none flex items-center gap-1 shadow-sm w-12"><div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div><div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div><div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div></div></div>)}
         </div>
         <div className="bg-[#202c33] px-3 py-2 flex items-center gap-3 z-20 border-t border-gray-700">
-          <Smile size={20} className="text-gray-400 hover:text-gray-200 cursor-pointer" />
-          <Paperclip size={20} className="text-gray-400 hover:text-gray-200 cursor-pointer" />
+          <Smile size={20} className="text-gray-400 hover:text-gray-200 cursor-pointer" role="button" aria-label="Inserir emoji" />
+          <Paperclip size={20} className="text-gray-400 hover:text-gray-200 cursor-pointer" role="button" aria-label="Anexar arquivo" />
           <div className="flex-1 bg-[#2a3942] rounded-full px-4 py-2 flex items-center h-10">
             <span className="text-white text-sm line-clamp-1">{inputValue}<span className="animate-pulse border-r-2 border-white ml-0.5 inline-block align-middle h-4"></span></span>
             {!inputValue && <span className="text-gray-400 text-sm">Mensagem</span>}
           </div>
-          {inputValue ? (<Send size={20} className="text-[#00a884] cursor-pointer" />) : (<Mic size={20} className="text-gray-400 cursor-pointer hover:text-gray-200" />)}
+          {inputValue ? (<Send size={20} className="text-[#00a884] cursor-pointer" role="button" aria-label="Enviar mensagem" />) : (<Mic size={20} className="text-gray-400 cursor-pointer hover:text-gray-200" role="button" aria-label="Gravar áudio" />)}
         </div>
       </div>
     </div>
@@ -369,7 +369,7 @@ const NavbarComponent = () => {
             </a>
           </div>
           <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white p-2">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white p-2" aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}>
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
@@ -1045,7 +1045,7 @@ const App = () => {
                 <div className="w-2 h-2 rounded-full bg-green-500"></div>
                 <span className="ml-2 text-xs text-gray-500 font-mono">cal.com/toftsolutionsai</span>
               </div>
-              <button onClick={() => setIsScheduleOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+              <button onClick={() => setIsScheduleOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors" aria-label="Fechar modal">
                 <X size={20} className="text-gray-400" />
               </button>
             </div>
