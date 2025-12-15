@@ -69,12 +69,12 @@ const Preloader = ({ onComplete }) => {
         if (prev >= 100) {
           clearInterval(interval);
           setFinished(true);
-          setTimeout(onComplete, 800); // Espera a animação de saída
+          setTimeout(onComplete, 100); // Espera mínima
           return 100;
         }
-        return prev + 2; // Velocidade do loading
+        return prev + 5; // Loading mais rápido
       });
-    }, 30);
+    }, 15); // Intervalo menor
     return () => clearInterval(interval);
   }, [onComplete]);
 
@@ -755,11 +755,14 @@ const AboutSection = () => {
   );
 };
 
+
+
 /* --- APP --- */
 const App = () => {
   const [loading, setLoading] = useState(true);
   const [currentView, setCurrentView] = useState('home'); // 'home', 'terms', 'privacy'
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const parallaxOffset = useParallax(0.15);
 
@@ -793,7 +796,6 @@ const App = () => {
           .animate-shimmer { background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%); background-size: 200% 100%; animation: shimmer 3s infinite linear; }
         `}</style>
         
-        <ScrollProgress />
         <NavbarComponent />
 
         <section className="relative pt-36 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group min-h-screen flex items-center">
