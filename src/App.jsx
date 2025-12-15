@@ -14,6 +14,12 @@ import {
   Lock, Fingerprint, Award, Rocket, Video
 } from 'lucide-react';
 
+import { PremiumBackground } from './components/ui/PremiumBackground';
+import { TermsPage, PrivacyPage } from './pages/LegalPages';
+import { CookieConsent } from './components/ui/CookieConsent';
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/react"
+
 // Registrar plugin GSAP
 gsap.registerPlugin(ScrollTrigger);
 
@@ -352,9 +358,14 @@ const NavbarComponent = () => {
             ))}
           </div>
           <div className="hidden md:flex items-center gap-6">
-            <button className="bg-white text-black px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-gray-200 transition-all flex items-center gap-2">
+            <a 
+              href="https://wa.me/5585991872205?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20ToftSolutions." 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-white text-black px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-gray-200 transition-all flex items-center gap-2"
+            >
               Falar com consultor <ArrowRight size={16} />
-            </button>
+            </a>
           </div>
           <div className="md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white p-2">
@@ -746,8 +757,19 @@ const AboutSection = () => {
 /* --- APP --- */
 const App = () => {
   const [loading, setLoading] = useState(true);
-  const parallaxOffset = useParallax(0.1);
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'terms', 'privacy'
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const parallaxOffset = useParallax(0.15);
+
+  // Se for uma página legal, renderiza apenas ela
+  if (currentView === 'terms') {
+    return <TermsPage onBack={() => setCurrentView('home')} />;
+  }
+  
+  if (currentView === 'privacy') {
+    return <PrivacyPage onBack={() => setCurrentView('home')} />;
+  }
 
   return (
     <>
@@ -769,10 +791,11 @@ const App = () => {
         <ScrollProgress />
         <NavbarComponent />
 
-        <section className="relative pt-36 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group">
-          <StripedPattern className="[mask-image:radial-gradient(800px_circle_at_center,white,transparent)]" />
+        <section className="relative pt-36 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group min-h-screen flex items-center">
+          {/* Premium cinematic background */}
+          <PremiumBackground />
           {/* Parallax Effect on Background */}
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[120px] pointer-events-none" style={{ transform: `translateY(${parallaxOffset}px)` }}></div>
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/[0.03] rounded-full blur-[150px] pointer-events-none" style={{ transform: `translateY(${parallaxOffset}px)` }}></div>
 
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
@@ -920,26 +943,85 @@ const App = () => {
           </div>
         </section>
 
-        <footer className="bg-black border-t border-white/10 pt-16 pb-8">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-16">
-              <div className="col-span-2">
-                <div className="flex items-center gap-2 mb-4"><div className="w-7 h-7 bg-white text-black rounded-md flex items-center justify-center font-serif font-bold text-lg">T</div><span className="text-lg font-bold text-white">ToftSolutions</span></div>
-                <p className="text-gray-500 text-xs leading-relaxed max-w-xs">Empoderando empresas com inteligência artificial conversacional. O futuro das vendas é automático e elegante.</p>
+        <footer className="relative bg-black pt-20 pb-10 overflow-hidden">
+          {/* Efeito de brilho sutil no topo */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent"></div>
+          
+          {/* Background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-[#0a0a0a] pointer-events-none"></div>
+
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            {/* Top Section: Logo + Plataforma */}
+            <div className="grid md:grid-cols-2 gap-16 mb-20 pb-16 border-b border-white/5">
+              {/* Logo e Descrição */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 group cursor-pointer">
+                  <div className="w-10 h-10 bg-gradient-to-br from-white to-gray-200 text-black rounded-xl flex items-center justify-center font-serif font-bold text-xl shadow-lg group-hover:shadow-emerald-500/20 transition-all">
+                    T
+                  </div>
+                  <span className="text-2xl font-bold text-white tracking-tight">ToftSolutions</span>
+                </div>
+                <p className="text-gray-400 text-sm leading-relaxed max-w-md font-light">
+                  Empoderando empresas com inteligência artificial conversacional. O futuro das vendas é automático, elegante e invisível.
+                </p>
               </div>
-              <div><h4 className="text-white font-bold mb-4 text-sm">Plataforma</h4><ul className="space-y-3 text-gray-500 text-xs"><li><a href="#" className="hover:text-white transition-colors">WhatsApp API</a></li><li><a href="#" className="hover:text-white transition-colors">Chatbot Builder</a></li><li><a href="#" className="hover:text-white transition-colors">CRM Integrado</a></li></ul></div>
-              <div><h4 className="text-white font-bold mb-4 text-sm">Empresa</h4><ul className="space-y-3 text-gray-500 text-xs"><li><a href="#" className="hover:text-white transition-colors">Sobre nós</a></li><li><a href="#" className="hover:text-white transition-colors">Carreiras</a></li><li><a href="#" className="hover:text-white transition-colors">Contato</a></li></ul></div>
-              <div className="col-span-2"><h4 className="text-white font-bold mb-4 text-sm">Newsletter</h4><div className="flex border-b border-white/20 pb-2"><input type="email" placeholder="seu@email.com" className="bg-transparent border-none text-white focus:outline-none w-full placeholder-gray-600 text-sm" /><button className="text-white font-bold text-xs uppercase tracking-wider hover:text-gray-300">Enviar</button></div></div>
+
+              {/* Plataforma */}
+              <div className="space-y-6">
+                <h4 className="text-white font-semibold text-sm tracking-wide uppercase flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-emerald-500"></span>
+                  Plataforma
+                </h4>
+                <ul className="space-y-4">
+                  <li>
+                    <a href="#" className="group flex items-center gap-3 text-gray-400 hover:text-emerald-400 transition-colors text-sm">
+                      <ChevronRight size={14} className="text-emerald-500/50 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all" />
+                      WhatsApp API
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="group flex items-center gap-3 text-gray-400 hover:text-emerald-400 transition-colors text-sm">
+                      <ChevronRight size={14} className="text-emerald-500/50 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all" />
+                      Chatbot Builder
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="group flex items-center gap-3 text-gray-400 hover:text-emerald-400 transition-colors text-sm">
+                      <ChevronRight size={14} className="text-emerald-500/50 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all" />
+                      CRM Integrado
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
             
-            {/* Nome da marca grande */}
-            <div className="relative overflow-hidden py-4">
-              <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] font-bold text-gray-950 leading-none tracking-tighter select-none text-center">
+            {/* Massive Brand Name - Static & Elegant */}
+            <div className="relative py-12 mb-16">
+              {/* Subtle gradient background */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/30 to-transparent"></div>
+              
+              <h2 
+                className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none tracking-tighter select-none text-center" 
+                style={{ 
+                  color: '#0d0d0d',
+                  textShadow: '0 6px 16px rgba(255,255,255,0.06), 0 2px 4px rgba(255,255,255,0.04), 0 0 80px rgba(16,185,129,0.02)',
+                  WebkitTextStroke: '1px rgba(255,255,255,0.015)'
+                }}
+              >
                 TOFTSOLUTIONS
               </h2>
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-600 text-xs"><p>© 2024 ToftSolutions AI. All rights reserved.</p><div className="flex gap-6"><a href="#" className="hover:text-white transition-colors">Termos</a><a href="#" className="hover:text-white transition-colors">Privacidade</a><a href="#" className="hover:text-white transition-colors">Cookies</a></div></div>
+            {/* Bottom: Copyright */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-white/5">
+              <p className="text-gray-500 text-xs font-light">
+                &copy; {new Date().getFullYear()} ToftSolutions AI. Todos os direitos reservados.
+              </p>
+              <div className="flex gap-6">
+                <button onClick={() => setCurrentView('terms')} className="text-gray-500 hover:text-white text-xs transition-colors">Termos de Uso</button>
+                <button onClick={() => setCurrentView('privacy')} className="text-gray-500 hover:text-white text-xs transition-colors">Privacidade</button>
+              </div>
+            </div>
           </div>
         </footer>
       </div>
