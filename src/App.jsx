@@ -15,7 +15,9 @@ import {
 } from 'lucide-react';
 
 import { PremiumBackground } from './components/ui/PremiumBackground';
-import { TermsPage, PrivacyPage } from './pages/LegalPages';
+// Lazy load legal pages to reduce bundle size
+const TermsPage = React.lazy(() => import('./pages/LegalPages').then(module => ({ default: module.TermsPage })));
+const PrivacyPage = React.lazy(() => import('./pages/LegalPages').then(module => ({ default: module.PrivacyPage })));
 import { CookieConsent } from './components/ui/CookieConsent';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
@@ -58,46 +60,7 @@ const useOnScreen = (ref, threshold = 0.1) => {
 
 /* --- COMPONENTES DE EFEITO --- */
 
-// 1. Preloader
-const Preloader = ({ onComplete }) => {
-  const [progress, setProgress] = useState(0);
-  const [finished, setFinished] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setFinished(true);
-          setTimeout(onComplete, 100); // Espera mínima
-          return 100;
-        }
-        return prev + 5; // Loading mais rápido
-      });
-    }, 15); // Intervalo menor
-    return () => clearInterval(interval);
-  }, [onComplete]);
-
-  return (
-    <div 
-      className={`fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center transition-transform duration-700 ease-in-out ${finished ? '-translate-y-full' : 'translate-y-0'}`}
-    >
-      <div className="flex items-center gap-3 mb-8 animate-pulse">
-        <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center font-serif font-bold text-2xl">T</div>
-        <span className="text-3xl font-bold text-white tracking-tight">ToftSolutions</span>
-      </div>
-      
-      {/* Barra de Progresso */}
-      <div className="w-64 h-1 bg-gray-800 rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-emerald-500 transition-all duration-100 ease-out" 
-          style={{ width: `${progress}%` }}
-        ></div>
-      </div>
-      <span className="text-gray-500 text-xs mt-4 font-mono">{progress}%</span>
-    </div>
-  );
-};
 
 // 2. Reveal Text (SplitText)
 const RevealText = ({ text, className }) => {
@@ -759,7 +722,7 @@ const AboutSection = () => {
 
 /* --- APP --- */
 const App = () => {
-  const [loading, setLoading] = useState(true);
+  // loading state replaced by native HTML preloader logic
   const [currentView, setCurrentView] = useState('home'); // 'home', 'terms', 'privacy'
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
@@ -767,22 +730,37 @@ const App = () => {
   const parallaxOffset = useParallax(0.15);
 
   useEffect(() => {
+    // Remove HTML preloader when React hydrates
+    const preloader = document.getElementById('initial-preloader');
+    if (preloader) {
+      preloader.classList.add('hidden');
+      setTimeout(() => preloader.remove(), 500);
+    }
+    
+    // Initialize Clarity
     clarity.init('ulyfx4cizz');
   }, []);
 
-  // Se for uma página legal, renderiza apenas ela
+  // Se for uma página legal, renderiza apenas ela com Suspense
   if (currentView === 'terms') {
-    return <TermsPage onBack={() => setCurrentView('home')} />;
+    return (
+      <React.Suspense fallback={<div className="h-screen w-full bg-black flex items-center justify-center text-emerald-500">Loading...</div>}>
+         <TermsPage onBack={() => setCurrentView('home')} />
+      </React.Suspense>
+    );
   }
   
   if (currentView === 'privacy') {
-    return <PrivacyPage onBack={() => setCurrentView('home')} />;
+    return (
+      <React.Suspense fallback={<div className="h-screen w-full bg-black flex items-center justify-center text-emerald-500">Loading...</div>}>
+         <PrivacyPage onBack={() => setCurrentView('home')} />
+      </React.Suspense>
+    );
   }
 
   return (
     <>
-      <Preloader onComplete={() => setLoading(false)} />
-      <div className={`min-h-screen bg-[#000000] font-sans selection:bg-white/20 text-white overflow-x-hidden ${loading ? 'h-screen overflow-hidden' : ''} ${isScheduleOpen ? 'blur-sm' : ''}`}>
+      <div className={`min-h-screen bg-[#000000] font-sans selection:bg-white/20 text-white overflow-x-hidden ${isScheduleOpen ? 'blur-sm' : ''}`}>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap');
           .font-serif { font-family: 'Instrument Serif', serif; }

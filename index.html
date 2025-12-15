@@ -9,8 +9,30 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="preconnect" href="https://cdn.simpleicons.org" />
     <title>ToftSolutions | Soluções Digitais</title>
+    <link rel="preload" as="image" href="https://i.postimg.cc/6p64jPp0/image.png" />
+    <style>
+      /* Critical CSS for Instant Preloader */
+      #initial-preloader { position: fixed; inset: 0; z-index: 99999; background: #000; display: flex; flex-col: column; align-items: center; justify-content: center; transition: opacity 0.5s ease-out, visibility 0.5s; }
+      #initial-preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+      .loader-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; animation: pulse 2s infinite; }
+      .loader-icon { width: 48px; height: 48px; background: #fff; color: #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: serif; font-weight: bold; font-size: 24px; }
+      .loader-text { font-size: 30px; font-weight: bold; color: #fff; letter-spacing: -0.05em; font-family: sans-serif; }
+      .loader-bar { width: 256px; height: 4px; background: #1f2937; border-radius: 9999px; overflow: hidden; }
+      .loader-progress { height: 100%; background: #10b981; width: 0%; animation: load 2s ease-out forwards; }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+      @keyframes load { 0% { width: 0%; } 100% { width: 90%; } } /* React will finish the last 10% */
+    </style>
   </head>
   <body>
+    <div id="initial-preloader">
+      <div class="loader-logo">
+        <div class="loader-icon">T</div>
+        <span class="loader-text">ToftSolutions</span>
+      </div>
+      <div class="loader-bar">
+        <div class="loader-progress"></div>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
