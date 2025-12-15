@@ -762,7 +762,6 @@ const App = () => {
     <>
       <div className={`min-h-screen bg-[#000000] font-sans selection:bg-white/20 text-white overflow-x-hidden ${isScheduleOpen ? 'blur-sm' : ''}`}>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap');
           .font-serif { font-family: 'Instrument Serif', serif; }
           .font-sans { font-family: 'Inter', sans-serif; }
           @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
