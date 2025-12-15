@@ -1060,6 +1060,9 @@ const App = () => {
           </div>
         </div>
       )}
+      <CookieConsent onPrivacyClick={() => setCurrentView('privacy')} />
+      <Analytics />
+      <SpeedInsights />
     </>
   );
 };
