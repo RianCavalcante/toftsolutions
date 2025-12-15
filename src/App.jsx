@@ -19,6 +19,7 @@ import { TermsPage, PrivacyPage } from './pages/LegalPages';
 import { CookieConsent } from './components/ui/CookieConsent';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import { clarity } from 'react-microsoft-clarity';
 
 // Registrar plugin GSAP
 gsap.registerPlugin(ScrollTrigger);
@@ -759,8 +760,12 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [currentView, setCurrentView] = useState('home'); // 'home', 'terms', 'privacy'
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const parallaxOffset = useParallax(0.15);
+
+  useEffect(() => {
+    clarity.init('ulyfx4cizz');
+  }, []);
 
   // Se for uma página legal, renderiza apenas ela
   if (currentView === 'terms') {
