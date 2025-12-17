@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+html { scrollbar-gutter: stable; }
+
 /* Esconder barra de rolagem mantendo funcionalidade */
 .scrollbar-hide {
   -ms-overflow-style: none;

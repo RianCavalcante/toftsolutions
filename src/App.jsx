@@ -922,7 +922,7 @@ const App = () => {
 
   return (
     <>
-      <div className={`min-h-screen bg-[#000000] font-sans selection:bg-white/20 text-white overflow-x-hidden ${isScheduleOpen ? 'blur-sm' : ''}`}>
+      <div className={`min-h-[100svh] bg-[#000000] font-sans selection:bg-white/20 text-white overflow-x-hidden ${isScheduleOpen ? 'blur-sm' : ''}`}>
         <style>{`
           .font-serif { font-family: 'Instrument Serif', serif; }
           .font-sans { font-family: 'Inter', sans-serif; }
@@ -942,11 +942,42 @@ const App = () => {
           .hover-word-emerald { --hover-color: rgba(16,185,129,0.95); }
           .hover-word-blue { --hover-color: rgba(59,130,246,0.95); }
           .hover-word-white { --hover-color: rgba(255,255,255,0.98); }
+          .page-grid-fade {
+            position: absolute;
+            inset-inline: 0;
+            top: 0;
+            height: 140vh;
+            background-image:
+              linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.22;
+            -webkit-mask-image: linear-gradient(to bottom,
+              rgba(0,0,0,1) 0%,
+              rgba(0,0,0,1) 40%,
+              rgba(0,0,0,0.8) 52%,
+              rgba(0,0,0,0) 80%
+            );
+            mask-image: linear-gradient(to bottom,
+              rgba(0,0,0,1) 0%,
+              rgba(0,0,0,1) 40%,
+              rgba(0,0,0,0.8) 52%,
+              rgba(0,0,0,0) 80%
+            );
+          }
+          .page-grid-fade::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(1200px 520px at 50% 55%, rgba(0,0,0,0.75), transparent 60%);
+            opacity: 0.9;
+          }
         `}</style>
         
+        <div className="pointer-events-none page-grid-fade" aria-hidden="true"></div>
         <NavbarComponent />
 
-        <section ref={heroSectionRef} className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group min-h-screen flex items-center">
+        <section ref={heroSectionRef} className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group min-h-[100svh] flex items-center">
           {/* Premium cinematic background */}
           <PremiumBackground />
           {/* Parallax Effect on Background */}
