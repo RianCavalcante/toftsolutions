@@ -199,9 +199,16 @@ const NavbarComponent = () => {
             </div>
             <span className="text-xl font-bold text-white tracking-tight group-hover:text-emerald-400 transition-colors duration-300">ToftSolutions</span>
           </div>
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-1">
             {['Método', 'Soluções', 'Resultados'].map((item) => (
-              <a key={item} href="#" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{item}</a>
+              <a 
+                key={item} 
+                href="#" 
+                className="relative px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-all duration-300 group"
+              >
+                {item}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-emerald-400 to-emerald-500 group-hover:w-3/4 transition-all duration-300 rounded-full"></span>
+              </a>
             ))}
           </div>
           <div className="hidden md:flex items-center gap-6">
@@ -829,7 +836,7 @@ const App = () => {
           {/* Parallax Effect on Background */}
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/[0.03] rounded-full blur-[150px] pointer-events-none" style={{ transform: `translateY(${parallaxOffset}px)` }}></div>
 
-          <div className="max-w-7xl mx-auto relative z-10">
+          <div className="max-w-screen-2xl mx-auto relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
               <div className="flex-1 text-center lg:text-left space-y-6 max-w-2xl mx-auto lg:mx-0 lg:sticky lg:top-32 self-start pb-6 sm:pb-8 lg:pb-0">
                 <div data-anim="hero-title" className="space-y-3">
@@ -898,28 +905,47 @@ const App = () => {
         <AboutSection />
         
         {/* Scheduling Section */}
-        <section id="agendar" data-anim="reveal" className="py-16 sm:py-24 relative bg-[#000000] border-t border-white/5">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#050505] to-[#000000] pointer-events-none"></div>
+        <section id="agendar" data-anim="reveal" className="py-16 sm:py-24 relative bg-[#000000] border-t border-white/5 overflow-hidden">
+          {/* Grid pattern coming from bottom */}
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div 
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)`,
+                backgroundSize: '32px 32px',
+                opacity: 0.22,
+                WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 70%)',
+                maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 70%)'
+              }}
+            ></div>
+          </div>
           <div className="max-w-7xl mx-auto px-6 relative z-10">
-            <div className="text-center mb-16">
-              <h2
-                className={`hover-swap text-4xl md:text-6xl font-medium mb-6 tracking-tight leading-tight text-white ${isScheduleTitleSwapOn ? 'is-active' : ''}`}
-                onMouseEnter={() => setIsScheduleTitleSwapOn(true)}
-                onMouseLeave={() => setIsScheduleTitleSwapOn(false)}
-                onClick={() => setIsScheduleTitleSwapOn(v => !v)}
-                tabIndex={0}
-                role="button"
-                aria-label="Alternar destaque do título"
-              >
-                <HoverWord text="Agende sua" className="hover-word-emerald" />{" "}
-                <span className="text-emerald-500 font-serif italic">
-                  <HoverWord text="Demonstração" className="hover-word-white" />
-                </span>
-              </h2>
-              <p className="text-gray-500 text-lg max-w-2xl mx-auto font-light">
-                Veja na prática como nossa automação pode transformar o atendimento da sua empresa.
-              </p>
-            </div>
+            <div className="text-center mb-16 relative">
+                {/* Grid overlay behind header, coming from bottom, white */}
+                <div className="absolute inset-0 pointer-events-none" style={{
+                  backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)`,
+                  backgroundSize: '24px 24px',
+                  opacity: 0.2,
+                  maskImage: 'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%)',
+                }}></div>
+                <h2
+                  className={`hover-swap text-4xl md:text-6xl font-medium mb-6 tracking-tight leading-tight text-white ${isScheduleTitleSwapOn ? 'is-active' : ''}`}
+                  onMouseEnter={() => setIsScheduleTitleSwapOn(true)}
+                  onMouseLeave={() => setIsScheduleTitleSwapOn(false)}
+                  onClick={() => setIsScheduleTitleSwapOn(v => !v)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Alternar destaque do título"
+                >
+                  <HoverWord text="Agende sua" className="hover-word-emerald" />{" "}
+                  <span className="text-emerald-500 font-serif italic">
+                    <HoverWord text="Demonstração" className="hover-word-white" />
+                  </span>
+                </h2>
+                <p className="text-gray-500 text-lg max-w-2xl mx-auto font-light">
+                  Veja na prática como nossa automação pode transformar o atendimento da sua empresa.
+                </p>
+              </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
               {/* Card 1: Demonstração Online */}

@@ -112,12 +112,11 @@ const WhatsAppSimulator = () => {
   const addMessage = (msg) => setMessages((prev) => [...prev, msg]);
 
   return (
-    <div className="w-full max-w-2xl bg-[#0b141a] rounded-xl overflow-hidden shadow-2xl border border-purple-500/20 relative flex flex-col mx-auto lg:mx-0 h-[380px] z-20 hover:scale-[1.01] transition-transform duration-500 ease-out backdrop-blur-sm">
+    <div className="w-full max-w-2xl bg-[#0b141a] rounded-xl overflow-hidden shadow-2xl border border-purple-500/20 relative flex flex-col mx-auto lg:mx-0 h-[380px] z-20 backdrop-blur-sm">
       <div className="bg-[#202c33] px-4 py-2 flex items-center justify-between z-20 shadow-md border-b border-gray-700">
         <div className="flex items-center gap-3">
           <div className="relative">
             <img src="https://i.postimg.cc/gkb6bJNv/PERFIL-DO-LINKEDIN.jpg" alt="Avatar" className="w-9 h-9 rounded-full bg-gray-600 object-cover border-2 border-[#202c33]" />
-            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-[#202c33]"></div>
           </div>
           <div className="flex flex-col">
             <span className="text-gray-100 font-medium text-sm">ToftSolutions AI</span>
