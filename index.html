@@ -22,205 +22,133 @@
     <meta name="theme-color" content="#10b981" />
     <meta name="twitter:card" content="summary_large_image" />
     <style>
-      /* Critical CSS for premium preloader */
+      /* Critical CSS for initial loader (logo + subtle circles) */
       #initial-preloader {
         position: fixed;
         inset: 0;
         z-index: 99999;
-        background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.12), transparent 35%),
-                    radial-gradient(circle at 80% 10%, rgba(59, 130, 246, 0.08), transparent 30%),
-                    #030303;
+        background: #000;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 28px;
-        overflow: hidden;
-        transition: opacity 0.6s ease, visibility 0.6s ease;
-      }
-      #initial-preloader::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(120deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
-        opacity: 0.5;
-        pointer-events: none;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
       }
       #initial-preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-      .loader-card {
-        position: relative;
-        width: min(540px, 92vw);
-        padding: 26px;
-        border-radius: 24px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.04);
-        backdrop-filter: blur(12px);
-        color: #e5e7eb;
-        overflow: hidden;
-      }
-      .loader-card::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.18), transparent 45%),
-                    radial-gradient(circle at 85% 20%, rgba(59, 130, 246, 0.18), transparent 45%);
-        opacity: 0.4;
-        pointer-events: none;
-      }
-      .loader-header {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        margin-bottom: 18px;
-      }
-      .loader-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        display: grid;
-        place-items: center;
-        background: linear-gradient(135deg, #fff, #d1fae5);
-        color: #0b0b0b;
-        font-family: 'Instrument Serif', serif;
-        font-size: 22px;
-        font-weight: 700;
-        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.35);
-        animation: floaty 4s ease-in-out infinite;
-      }
-      .loader-title {
+
+      .preloader-brand {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        gap: 22px;
+        text-align: center;
+      }
+
+      .preloader-logo {
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: rgba(255,255,255,0.92);
+        font-size: clamp(22px, 4.5vw, 34px);
         line-height: 1.1;
       }
-      .loader-name {
-        font-weight: 800;
-        font-size: 24px;
-        letter-spacing: -0.03em;
-        color: #f9fafb;
-      }
-      .loader-subtitle {
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: #9ca3af;
-      }
-      .loader-chip {
-        margin-left: auto;
-        padding: 8px 12px;
-        border-radius: 9999px;
-        background: rgba(16, 185, 129, 0.12);
-        color: #a7f3d0;
-        font-size: 11px;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(16, 185, 129, 0.35);
-      }
-      .loader-status-row {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 12px;
-        color: #d1d5db;
-        font-size: 13px;
-      }
-      .loader-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 9999px;
-        background: #10b981;
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.35);
-        animation: ping 1.6s infinite;
-      }
-      .loader-percent { font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.02em; color: #e5edff; }
-      .loader-bar {
-        width: 100%;
-        height: 8px;
-        background: rgba(17, 24, 39, 0.7);
-        border-radius: 9999px;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        position: relative;
-      }
-      .loader-bar::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
-        opacity: 0.7;
-      }
-      .loader-progress {
-        position: relative;
-        height: 100%;
-        width: var(--progress, 12%);
-        border-radius: 9999px;
-        background: linear-gradient(90deg, #34d399, #3b82f6);
-        box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.15), 0 10px 28px rgba(34, 211, 238, 0.15);
-        transition: width 0.6s ease, filter 0.6s ease, box-shadow 0.6s ease;
-        overflow: hidden;
-      }
-      .loader-progress::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(120deg, rgba(255, 255, 255, 0) 10%, rgba(255, 255, 255, 0.35) 40%, rgba(255, 255, 255, 0) 70%);
-        animation: shimmer 1.8s infinite;
-      }
-      .loader-bullets {
+
+      .loader {
         display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 14px;
+        justify-content: center;
+        align-items: center;
+        --color: hsl(0, 0%, 87%);
+        --animation: 2s ease-in-out infinite;
       }
-      .loader-pill {
-        padding: 6px 10px;
-        border-radius: 9999px;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        color: #cbd5e1;
-        font-size: 11px;
-        letter-spacing: 0.04em;
-      }
-      .loader-footnote {
-        margin-top: 12px;
-        font-size: 12px;
-        color: #9ca3af;
+
+      .loader .circle {
         display: flex;
         align-items: center;
-        gap: 8px;
-        letter-spacing: 0.02em;
+        justify-content: center;
+        position: relative;
+        width: 18px;
+        height: 18px;
+        border: solid 2px var(--color);
+        border-radius: 50%;
+        margin: 0 8px;
+        background-color: transparent;
+        animation: circle-keys var(--animation);
+        opacity: 0.9;
       }
-      @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-      @keyframes ping { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.35); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-      @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+      .loader .circle .dot {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: var(--color);
+        animation: dot-keys var(--animation);
+      }
+
+      .loader .circle .outline {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        animation: outline-keys var(--animation);
+      }
+
+      .circle:nth-child(2) { animation-delay: 0.3s; }
+      .circle:nth-child(3) { animation-delay: 0.6s; }
+      .circle:nth-child(4) { animation-delay: 0.9s; }
+      .circle:nth-child(5) { animation-delay: 1.2s; }
+
+      .circle:nth-child(2) .dot { animation-delay: 0.3s; }
+      .circle:nth-child(3) .dot { animation-delay: 0.6s; }
+      .circle:nth-child(4) .dot { animation-delay: 0.9s; }
+      .circle:nth-child(5) .dot { animation-delay: 1.2s; }
+
+      .circle:nth-child(1) .outline { animation-delay: 0.9s; }
+      .circle:nth-child(2) .outline { animation-delay: 1.2s; }
+      .circle:nth-child(3) .outline { animation-delay: 1.5s; }
+      .circle:nth-child(4) .outline { animation-delay: 1.8s; }
+      .circle:nth-child(5) .outline { animation-delay: 2.1s; }
+
+      @keyframes circle-keys {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.45); opacity: 0.55; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+
+      @keyframes dot-keys {
+        0% { transform: translate(-50%, -50%) scale(1); }
+        50% { transform: translate(-50%, -50%) scale(0); }
+        100% { transform: translate(-50%, -50%) scale(1); }
+      }
+
+      @keyframes outline-keys {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          outline: solid 18px var(--color);
+          outline-offset: 0;
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          outline: solid 0 transparent;
+          outline-offset: 18px;
+          opacity: 0;
+        }
+      }
     </style>
   </head>
   <body>
     <div id="initial-preloader">
-      <div class="loader-card">
-        <div class="loader-header">
-          <div class="loader-icon">T</div>
-          <div class="loader-title">
-            <span class="loader-name">ToftSolutions</span>
-          <span class="loader-subtitle">IA + automação em tempo real</span>
-        </div>
-        <span class="loader-chip">Modo imersivo</span>
-      </div>
-      <div class="loader-status-row">
-        <span class="loader-dot"></span>
-        <span class="loader-status">Inicializando ambiente seguro</span>
-        <span class="loader-percent">12%</span>
-      </div>
-      <div class="loader-bar">
-        <div class="loader-progress" style="--progress:12%;"></div>
-      </div>
-        <div class="loader-bullets">
-          <span class="loader-pill">Criando agente</span>
-          <span class="loader-pill">Sincronizando dados</span>
-          <span class="loader-pill">Ativando monitoramento</span>
-        </div>
-        <div class="loader-footnote">
-          <span class="loader-dot" style="width:8px;height:8px;"></span>
-          <span>Experiência focada em velocidade e clareza.</span>
+      <div class="preloader-brand" aria-label="Carregando ToftSolutions" role="status">
+        <div class="preloader-logo">ToftSolutions</div>
+        <div class="loader" aria-hidden="true">
+          <div class="circle"><div class="dot"></div><div class="outline"></div></div>
+          <div class="circle"><div class="dot"></div><div class="outline"></div></div>
+          <div class="circle"><div class="dot"></div><div class="outline"></div></div>
+          <div class="circle"><div class="dot"></div><div class="outline"></div></div>
+          <div class="circle"><div class="dot"></div><div class="outline"></div></div>
         </div>
       </div>
     </div>

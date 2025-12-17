@@ -830,6 +830,7 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [isHeroTitleSwapOn, setIsHeroTitleSwapOn] = useState(false);
   const [isScheduleTitleSwapOn, setIsScheduleTitleSwapOn] = useState(false);
   const parallaxOffset = useParallax(0.15);
   const heroSectionRef = useRef(null);
@@ -837,48 +838,17 @@ const App = () => {
 
 
   useEffect(() => {
-    // Harmonize and remove HTML preloader when React hydrates
+    // Remove HTML preloader when React hydrates
     const preloader = document.getElementById('initial-preloader');
-    const progressEl = preloader?.querySelector('.loader-progress');
-    const percentEl = preloader?.querySelector('.loader-percent');
-    const statusEl = preloader?.querySelector('.loader-status');
-    const statusMessages = [
-      'Aquecendo modelos',
-      'Sincronizando canais de atendimento',
-      'Otimizando latência',
-      'Carregando interface imersiva'
-    ];
-    let fakeProgress = 12;
-    let statusIndex = 0;
-    const intervalId = preloader ? window.setInterval(() => {
-      const delta = (100 - fakeProgress) * 0.12;
-      const jitter = Math.random() * 1.5;
-      fakeProgress = Math.min(fakeProgress + Math.max(1.8, delta + jitter), 98);
-      progressEl?.style.setProperty('--progress', `${fakeProgress}%`);
-      if (percentEl) percentEl.textContent = `${Math.round(fakeProgress)}%`;
-      if (statusEl && statusMessages[statusIndex] && fakeProgress > 25 + statusIndex * 15) {
-        statusEl.textContent = statusMessages[statusIndex];
-        statusIndex = Math.min(statusIndex + 1, statusMessages.length - 1);
-      }
-    }, 260) : null;
-
-    const finalizePreloader = () => {
-      if (!preloader) return;
-      if (intervalId) window.clearInterval(intervalId);
-      progressEl?.style.setProperty('--progress', '100%');
-      if (percentEl) percentEl.textContent = '100%';
-      if (statusEl) statusEl.textContent = 'Experiência pronta';
+    const finishTimeout = preloader ? window.setTimeout(() => {
       preloader.classList.add('hidden');
-      setTimeout(() => preloader.remove(), 600);
-    };
-
-    const finishTimeout = preloader ? window.setTimeout(finalizePreloader, 1400) : null;
+      setTimeout(() => preloader.remove(), 500);
+    }, 700) : null;
 
     // Initialize Clarity
     clarity.init('ulyfx4cizz');
 
     return () => {
-      if (intervalId) window.clearInterval(intervalId);
       if (finishTimeout) window.clearTimeout(finishTimeout);
     };
   }, []);
@@ -987,8 +957,19 @@ const App = () => {
               <div className="flex-1 text-center lg:text-left space-y-6 max-w-2xl mx-auto lg:mx-0 lg:sticky lg:top-32 self-start pb-6 sm:pb-8 lg:pb-0">
                 <div data-anim="hero-title" className="space-y-3">
                   <span className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase">É assim que escalamos</span>
-                  <h1 className="text-4xl lg:text-5xl font-medium leading-[1.15] tracking-tight">
-                    Atenda seus clientes em <Cover>velocidade máxima</Cover>
+                  <h1
+                    className={`hover-swap text-4xl lg:text-5xl font-medium leading-[1.15] tracking-tight ${isHeroTitleSwapOn ? 'is-active' : ''}`}
+                    onMouseEnter={() => setIsHeroTitleSwapOn(true)}
+                    onMouseLeave={() => setIsHeroTitleSwapOn(false)}
+                    onClick={() => setIsHeroTitleSwapOn(v => !v)}
+                    tabIndex={0}
+                    role="button"
+                    aria-label="Alternar destaque do título principal"
+                  >
+                    <HoverWord text="Atenda seus clientes em" className="hover-word-emerald" />{" "}
+                    <Cover className="text-emerald-500">
+                      <HoverWord text="velocidade máxima" className="hover-word-white" />
+                    </Cover>
                   </h1>
                 </div>
                 <p data-anim="hero-copy" className="text-lg text-gray-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light overflow-hidden">
