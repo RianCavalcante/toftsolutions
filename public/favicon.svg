@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect x="0" y="0" width="512" height="512" rx="100" ry="100" fill="white"/>
-  <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="serif" font-weight="bold" font-size="350" fill="black">T</text>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="faviconGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#faviconGradient)"/>
+  <path d="M18 28 Q24 22, 30 28 T42 28" stroke="white" stroke-width="3" fill="none"/>
+  <path d="M18 34 Q24 28, 30 34 T42 34" stroke="white" stroke-width="3" fill="none" opacity="0.7"/>
+  <path d="M18 40 Q24 34, 30 40 T42 40" stroke="white" stroke-width="3" fill="none" opacity="0.4"/>
 </svg>

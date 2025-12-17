@@ -190,14 +190,25 @@ const NavbarComponent = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
-                <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="currentColor"/>
-                <path d="M14 2V8H20" fill="currentColor" opacity="0.3"/>
-                <path d="M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <svg width="180" height="52" viewBox="0 0 280 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-300">
+                <defs>
+                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#10b981" />
+                    <stop offset="100%" stopColor="#059669" />
+                  </linearGradient>
+                </defs>
+                <rect x="0" y="15" width="50" height="50" rx="10" fill="url(#gradient1)"/>
+                {/* Ondas digitais */}
+                <path d="M15 35 Q20 30, 25 35 T35 35" stroke="white" strokeWidth="2" fill="none"/>
+                <path d="M15 40 Q20 35, 25 40 T35 40" stroke="white" strokeWidth="2" fill="none" opacity="0.7"/>
+                <path d="M15 45 Q20 40, 25 45 T35 45" stroke="white" strokeWidth="2" fill="none" opacity="0.4"/>
+                <text x="65" y="52" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '36px', fontWeight: 700, fill: 'white' }}>
+                  Toft
+                </text>
+                <text x="145" y="52" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '36px', fontWeight: 700, fill: '#10b981' }}>
+                  Solutions
+                </text>
               </svg>
-            </div>
-            <span className="text-xl font-bold text-white tracking-tight group-hover:text-emerald-400 transition-colors duration-300">ToftSolutions</span>
           </div>
           <div className="hidden md:flex items-center gap-1">
             {['Método', 'Soluções', 'Resultados'].map((item) => (
@@ -339,25 +350,40 @@ const PremiumBenefitsSection = () => {
       metricLabel: "disponibilidade"
     },
     {
-      icon: <Users size={24} strokeWidth={1.5} />,
+      icon: <i className="fi fi-ts-users text-2xl"></i>,
       title: "Escala Ilimitada",
       description: "Atenda milhares de clientes simultaneamente sem contratar mais.",
       metric: "∞",
-      metricLabel: "conversas simultâneas"
+      metricLabel: "conversas simultâneas",
+      containerClass: "bg-black border border-emerald-500/20 animate-subtle-pulse shadow-[0_0_15px_-3px_rgba(16,185,129,0.15)]",
+      iconClass: "text-emerald-400"
     },
     {
-      icon: <Shield size={24} strokeWidth={1.5} />,
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-400">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+      ),
       title: "Segurança Total",
       description: "Dados criptografados e em conformidade com LGPD e GDPR.",
       metric: "100%",
-      metricLabel: "compliance"
+      metricLabel: "compliance",
+      containerClass: "bg-black border border-emerald-500/20 animate-subtle-pulse shadow-[0_0_15px_-3px_rgba(16,185,129,0.15)]",
+      iconClass: "text-emerald-400"
     },
     {
-      icon: <Bot size={24} strokeWidth={1.5} />,
+      icon: (
+        <svg role="img" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="text-emerald-400 w-6 h-6">
+          <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.055 6.055 0 0 0 5.7718-4.2058 5.989 5.989 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1195 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.453l-.142.0805L8.7043 5.4599a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z" />
+        </svg>
+      ),
       title: "IA de Ponta",
       description: "Tecnologia GPT avançada que entende contexto e emoções.",
-      metric: "GPT-4",
-      metricLabel: "modelo de IA"
+      metric: "GPT 5.2",
+      metricLabel: "modelo de IA",
+      containerClass: "bg-black border border-emerald-500/20 animate-subtle-pulse shadow-[0_0_15px_-3px_rgba(16,185,129,0.15)]",
+      iconClass: "text-emerald-400"
     }
   ];
 
@@ -468,8 +494,8 @@ const PremiumBenefitsSection = () => {
               
               {/* Icon container */}
               <div className="relative mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center group-hover:border-white/20 group-hover:bg-white/[0.06] transition-colors duration-300">
-                  <span className="text-gray-400 group-hover:text-white transition-colors duration-500">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors duration-300 ${benefit.containerClass || 'bg-white/[0.04] border border-white/10 group-hover:border-white/20 group-hover:bg-white/[0.06]'}`}>
+                  <span className={`transition-colors duration-500 ${benefit.iconClass || 'text-gray-400 group-hover:text-white'}`}>
                     {benefit.icon}
                   </span>
                 </div>
@@ -625,10 +651,8 @@ const AboutSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-emerald-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative flex items-center gap-4 p-6 bg-gradient-to-br from-white/[0.02] to-white/[0.01] rounded-2xl border border-white/[0.05] hover:border-emerald-500/30 transition-all duration-500 cursor-pointer hover:transform hover:scale-[1.02] hover:shadow-[0_0_30px_-10px_rgba(16,185,129,0.3)]">
                   <div className="relative">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-400/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-lg">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-400 group-hover:text-emerald-300 transition-colors">
-                        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                    <div className="w-14 h-14 rounded-2xl bg-black border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_-3px_rgba(16,185,129,0.15)] animate-subtle-pulse">
+                      <i className="fi fi-ts-bolt text-2xl text-emerald-400 group-hover:text-emerald-300 transition-colors"></i>
                     </div>
                     <div className="absolute inset-0 bg-emerald-400/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
                   </div>
@@ -645,15 +669,8 @@ const AboutSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-blue-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative flex items-center gap-4 p-6 bg-gradient-to-br from-white/[0.02] to-white/[0.01] rounded-2xl border border-white/[0.05] hover:border-blue-500/30 transition-all duration-500 cursor-pointer hover:transform hover:scale-[1.02] hover:shadow-[0_0_30px_-10px_rgba(59,130,246,0.3)]">
                   <div className="relative">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-400/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-lg">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-blue-400 group-hover:text-blue-300 transition-colors">
-                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M12 7V12L15 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M12 2V4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        <path d="M12 20V22" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        <path d="M4 12H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        <path d="M22 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
+                    <div className="w-14 h-14 rounded-2xl bg-black border border-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_-3px_rgba(59,130,246,0.15)] animate-subtle-pulse">
+                      <i className="fi fi-ts-time-fast text-2xl text-blue-400 group-hover:text-blue-300 transition-colors"></i>
                     </div>
                     <div className="absolute inset-0 bg-blue-400/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
                   </div>
