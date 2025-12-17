@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 import { PremiumBackground } from './components/ui/PremiumBackground';
+const WhatsAppSimulator = React.lazy(() => import('./components/WhatsAppSimulator'));
 // Lazy load legal pages to reduce bundle size
 const TermsPage = React.lazy(() => import('./pages/LegalPages').then(module => ({ default: module.TermsPage })));
 const PrivacyPage = React.lazy(() => import('./pages/LegalPages').then(module => ({ default: module.PrivacyPage })));
@@ -172,7 +173,7 @@ const StripedPattern = ({ className }) => (
 );
 
 /* --- COMPONENTE: SIMULADOR DE WHATSAPP --- */
-const WhatsAppSimulator = () => {
+const WhatsAppSimulatorLegacy = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
@@ -1018,11 +1019,13 @@ const App = () => {
               </div>
               <div data-anim="hero-sim" className="flex-1 w-full max-w-xl lg:max-w-none perspective-1000 relative mt-12 sm:mt-14 lg:mt-0 flex justify-center lg:justify-end">
                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-gradient-to-tr from-white/10 to-gray-500/10 blur-[90px] rounded-full -z-10"></div>
-                 <WhatsAppSimulator />
-              </div>
-            </div>
-          </div>
-        </section>
+                 <React.Suspense fallback={<div className="w-full max-w-md mx-auto h-[420px] rounded-3xl border border-white/10 bg-white/5 animate-pulse" />}>
+                   <WhatsAppSimulator />
+                 </React.Suspense>
+               </div>
+             </div>
+           </div>
+         </section>
 
         {/* Como Funciona */}
         <section data-anim="reveal" className="py-16 sm:py-24 relative bg-[#050505]">
