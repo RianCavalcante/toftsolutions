@@ -28,6 +28,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 /* --- HOOKS DE EFEITOS VISUAIS --- */
 
+const usePrefersReducedMotion = () => {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    if (!media) return;
+    const handleChange = () => setPrefersReducedMotion(!!media.matches);
+    handleChange();
+    media.addEventListener?.('change', handleChange);
+    return () => media.removeEventListener?.('change', handleChange);
+  }, []);
+  return prefersReducedMotion;
+};
+
 // Hook para Parallax
 const useParallax = (speed = 0.5) => {
   const [offset, setOffset] = useState(0);
@@ -59,6 +72,24 @@ const useOnScreen = (ref, threshold = 0.1) => {
 };
 
 /* --- COMPONENTES DE EFEITO --- */
+
+const HoverWord = ({ text, className = "" }) => (
+  <span className={`hover-word ${className}`} role="text" aria-label={text}>
+    {text.split("").map((char, idx) => {
+      const safeChar = char === " " ? "\u00A0" : char;
+      return (
+        <span
+          key={`${char}-${idx}`}
+          aria-hidden="true"
+          data-char={safeChar}
+          style={{ "--delay": `${idx * 18}ms` }}
+        >
+          {safeChar}
+        </span>
+      );
+    })}
+  </span>
+);
 
 
 
@@ -312,9 +343,15 @@ const NavbarComponent = () => {
     <nav className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${scrolled ? 'bg-[#000000]/80 backdrop-blur-xl border-white/5 py-3' : 'bg-transparent border-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-14">
-          <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-9 h-9 bg-white text-black rounded-lg flex items-center justify-center font-bold font-serif text-xl">T</div>
-            <span className="text-xl font-bold text-white tracking-tight">ToftSolutions</span>
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="currentColor"/>
+                <path d="M14 2V8H20" fill="currentColor" opacity="0.3"/>
+                <path d="M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <span className="text-xl font-bold text-white tracking-tight group-hover:text-emerald-400 transition-colors duration-300">ToftSolutions</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
             {['Método', 'Soluções', 'Resultados'].map((item) => (
@@ -536,7 +573,7 @@ const PremiumBenefitsSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-32 relative bg-gradient-to-b from-[#030303] via-[#050505] to-[#030303] overflow-hidden">
+    <section ref={sectionRef} className="py-16 sm:py-32 relative bg-gradient-to-b from-[#030303] via-[#050505] to-[#030303] overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.02] via-transparent to-transparent"></div>
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
@@ -568,50 +605,50 @@ const PremiumBenefitsSection = () => {
             <div
               key={idx}
               ref={el => benefitsRef.current[idx] = el}
-              className="group relative p-8 rounded-3xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/[0.05] hover:border-white/[0.15] transition-all duration-700 hover:transform hover:scale-[1.02] cursor-pointer overflow-hidden"
+              className="group relative p-6 sm:p-8 rounded-3xl bg-[#0A0A0A]/70 border border-white/[0.07] hover:border-white/[0.14] transition-[transform,box-shadow,border-color,background-color] duration-300 ease-out cursor-pointer overflow-hidden hover:-translate-y-1 hover:bg-white/[0.03] hover:shadow-[0_26px_70px_-55px_rgba(0,0,0,0.9)] focus-within:border-white/20"
             >
               {/* Hover glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.07),transparent_55%),radial-gradient(circle_at_80%_10%,rgba(255,255,255,0.04),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
               
               {/* Top shine line */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               {/* Icon container */}
               <div className="relative mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-white/[0.02] border border-white/10 flex items-center justify-center group-hover:border-white/20 transition-all duration-500">
+                <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center group-hover:border-white/20 group-hover:bg-white/[0.06] transition-colors duration-300">
                   <span className="text-gray-400 group-hover:text-white transition-colors duration-500">
                     {benefit.icon}
                   </span>
                 </div>
                 {/* Icon glow on hover */}
-                <div className="absolute inset-0 bg-white/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-white/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-25 transition-opacity duration-300"></div>
               </div>
 
               {/* Content */}
               <div className="relative z-10">
-                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight group-hover:translate-x-1 transition-transform duration-500">
+                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight transition-colors duration-300 group-hover:text-white">
                   {benefit.title}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6 group-hover:text-gray-400 transition-colors duration-500">
+                <p className="text-gray-500 text-sm leading-relaxed mb-6 group-hover:text-gray-400 transition-colors duration-300 font-light">
                   {benefit.description}
                 </p>
 
                 {/* Metric display */}
-                <div className="flex items-center gap-2 pt-4 border-t border-white/[0.05] group-hover:border-white/10 transition-colors duration-500">
+                <div className="flex items-center gap-2 pt-4 border-t border-white/[0.06] group-hover:border-white/10 transition-colors duration-300">
                   <span 
                     ref={el => countersRef.current[idx] = el}
                     className="text-3xl font-bold text-emerald-400 leading-none"
                   >
                     {benefit.metric}
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-gray-600">
+                  <span className="text-[10px] uppercase tracking-wider text-gray-600 font-medium">
                     {benefit.metricLabel}
                   </span>
                 </div>
               </div>
 
               {/* Corner accent */}
-              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-gradient-to-br from-white/[0.03] to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-gradient-to-br from-white/[0.06] to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
           ))}
         </div>
@@ -633,15 +670,70 @@ const PremiumBenefitsSection = () => {
 const AboutSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
+  const cardsRef = useRef([]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); } }, { threshold: 0.2 });
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        // Trigger card animations
+        setTimeout(() => {
+          animateCards();
+          animateCounters();
+        }, 300);
+        observer.disconnect();
+      }
+    }, { threshold: 0.2 });
+
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
+  const animateCards = () => {
+    gsap.fromTo(
+      cardsRef.current,
+      {
+        y: 60,
+        opacity: 0,
+        scale: 0.9,
+        rotateX: -15
+      },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        rotateX: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power3.out",
+        force3D: true
+      }
+    );
+  };
+
+  const animateCounters = () => {
+    const counters = document.querySelectorAll('.counter-value');
+    counters.forEach((counter, index) => {
+      const target = parseInt(counter.dataset.target);
+      gsap.fromTo(
+        counter,
+        { innerText: 0 },
+        {
+          innerText: target,
+          duration: 2,
+          ease: "power2.out",
+          snap: { innerText: 1 },
+          delay: index * 0.3,
+          onUpdate: function() {
+            counter.innerText = Math.floor(this.targets()[0].innerText);
+          }
+        }
+      );
+    });
+  };
+
   return (
-    <section ref={sectionRef} className="py-32 relative bg-[#050505] border-t border-white/5 overflow-hidden">
+    <section ref={sectionRef} className="py-16 sm:py-32 relative bg-[#050505] border-t border-white/5 overflow-hidden">
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-[100px] pointer-events-none opacity-30"></div>
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
@@ -666,22 +758,6 @@ const AboutSection = () => {
             </div>
           </div>
           <div className="w-full lg:w-1/2 space-y-8 relative">
-            {/* Animated lines background */}
-            <div className="absolute -inset-4 -z-10 overflow-hidden rounded-2xl">
-              <div className="absolute inset-0 opacity-20">
-                {[...Array(8)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent"
-                    style={{
-                      top: `${12 + i * 12}%`,
-                      animation: `fadeLineIn 3s ease-in-out ${i * 0.3}s infinite`,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-            
             <div className="space-y-4">
               <h2 className="text-3xl md:text-4xl font-medium text-white leading-tight">Mais que código, geramos <br/><span className="font-serif italic text-gray-400">liberdade</span>.</h2>
               <div className="w-16 h-0.5 bg-white/20 rounded-full"></div>
@@ -691,23 +767,50 @@ const AboutSection = () => {
               <p>Combinamos engenharia de ponta com a naturalidade humana para criar agentes de IA que seus clientes <span className="text-emerald-400 font-medium">realmente gostam</span> de conversar. Não somos uma ferramenta genérica; somos parceiros estratégicos de crescimento.</p>
               <p>Liderada por especialistas obcecados por eficiência, nossa missão é simples: colocar seu comercial no <strong className="text-emerald-400 font-medium">piloto automático</strong> enquanto você foca no que ninguém pode automatizar: a visão do seu negócio.</p>
             </div>
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <div className="group flex items-center gap-3 p-4 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-xl border border-emerald-500/10 hover:border-emerald-500/30 hover:bg-emerald-500/10 transition-all duration-500 cursor-pointer">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                  <Rocket className="text-emerald-400 group-hover:text-emerald-300 transition-colors" size={20} />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-bold text-white leading-none group-hover:text-emerald-100 transition-colors">10x</span>
-                  <span className="text-[10px] text-gray-500 uppercase tracking-wider mt-1 group-hover:text-emerald-400/70 transition-colors">Mais Velocidade</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6">
+              <div ref={el => cardsRef.current[0] = el} className="group relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-emerald-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative flex items-center gap-4 p-6 bg-gradient-to-br from-white/[0.02] to-white/[0.01] rounded-2xl border border-white/[0.05] hover:border-emerald-500/30 transition-all duration-500 cursor-pointer hover:transform hover:scale-[1.02] hover:shadow-[0_0_30px_-10px_rgba(16,185,129,0.3)]">
+                  <div className="relative">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-400/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-400 group-hover:text-emerald-300 transition-colors">
+                        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <div className="absolute inset-0 bg-emerald-400/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-bold text-white leading-none group-hover:text-emerald-100 transition-colors font-mono">
+                      <span className="counter-value" data-target="10">0</span>x
+                    </span>
+                    <span className="text-[11px] text-gray-500 uppercase tracking-wider mt-1 group-hover:text-emerald-400/80 transition-colors font-medium">Mais Velocidade</span>
+                  </div>
+                  <div className="absolute top-2 right-2 w-2 h-2 bg-emerald-400 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
                 </div>
               </div>
-              <div className="group flex items-center gap-3 p-4 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-xl border border-emerald-500/10 hover:border-emerald-500/30 hover:bg-emerald-500/10 transition-all duration-500 cursor-pointer">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                  <Users className="text-emerald-400 group-hover:text-emerald-300 transition-colors" size={20} />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-bold text-white leading-none group-hover:text-emerald-100 transition-colors">24/7</span>
-                  <span className="text-[10px] text-gray-500 uppercase tracking-wider mt-1 group-hover:text-emerald-400/70 transition-colors">Disponibilidade</span>
+              <div ref={el => cardsRef.current[1] = el} className="group relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-blue-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative flex items-center gap-4 p-6 bg-gradient-to-br from-white/[0.02] to-white/[0.01] rounded-2xl border border-white/[0.05] hover:border-blue-500/30 transition-all duration-500 cursor-pointer hover:transform hover:scale-[1.02] hover:shadow-[0_0_30px_-10px_rgba(59,130,246,0.3)]">
+                  <div className="relative">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-400/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-blue-400 group-hover:text-blue-300 transition-colors">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M12 7V12L15 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M12 2V4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M12 20V22" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M4 12H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M22 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                    <div className="absolute inset-0 bg-blue-400/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-bold text-white leading-none group-hover:text-blue-100 transition-colors font-mono">
+                      <span className="counter-value" data-target="24">0</span>/7
+                    </span>
+                    <span className="text-[11px] text-gray-500 uppercase tracking-wider mt-1 group-hover:text-blue-400/80 transition-colors font-medium">Disponibilidade</span>
+                  </div>
+                  <div className="absolute top-2 right-2 w-2 h-2 bg-blue-400 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
                 </div>
               </div>
             </div>
@@ -727,19 +830,108 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [isScheduleTitleSwapOn, setIsScheduleTitleSwapOn] = useState(false);
   const parallaxOffset = useParallax(0.15);
+  const heroSectionRef = useRef(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
+
 
   useEffect(() => {
-    // Remove HTML preloader when React hydrates
+    // Harmonize and remove HTML preloader when React hydrates
     const preloader = document.getElementById('initial-preloader');
-    if (preloader) {
+    const progressEl = preloader?.querySelector('.loader-progress');
+    const percentEl = preloader?.querySelector('.loader-percent');
+    const statusEl = preloader?.querySelector('.loader-status');
+    const statusMessages = [
+      'Aquecendo modelos',
+      'Sincronizando canais de atendimento',
+      'Otimizando latência',
+      'Carregando interface imersiva'
+    ];
+    let fakeProgress = 12;
+    let statusIndex = 0;
+    const intervalId = preloader ? window.setInterval(() => {
+      const delta = (100 - fakeProgress) * 0.12;
+      const jitter = Math.random() * 1.5;
+      fakeProgress = Math.min(fakeProgress + Math.max(1.8, delta + jitter), 98);
+      progressEl?.style.setProperty('--progress', `${fakeProgress}%`);
+      if (percentEl) percentEl.textContent = `${Math.round(fakeProgress)}%`;
+      if (statusEl && statusMessages[statusIndex] && fakeProgress > 25 + statusIndex * 15) {
+        statusEl.textContent = statusMessages[statusIndex];
+        statusIndex = Math.min(statusIndex + 1, statusMessages.length - 1);
+      }
+    }, 260) : null;
+
+    const finalizePreloader = () => {
+      if (!preloader) return;
+      if (intervalId) window.clearInterval(intervalId);
+      progressEl?.style.setProperty('--progress', '100%');
+      if (percentEl) percentEl.textContent = '100%';
+      if (statusEl) statusEl.textContent = 'Experiência pronta';
       preloader.classList.add('hidden');
-      setTimeout(() => preloader.remove(), 500);
-    }
-    
+      setTimeout(() => preloader.remove(), 600);
+    };
+
+    const finishTimeout = preloader ? window.setTimeout(finalizePreloader, 1400) : null;
+
     // Initialize Clarity
     clarity.init('ulyfx4cizz');
+
+    return () => {
+      if (intervalId) window.clearInterval(intervalId);
+      if (finishTimeout) window.clearTimeout(finishTimeout);
+    };
   }, []);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) return;
+    if (!heroSectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const heroTitle = heroSectionRef.current?.querySelector('[data-anim="hero-title"]');
+      const heroCopy = heroSectionRef.current?.querySelector('[data-anim="hero-copy"]');
+      const heroCtas = heroSectionRef.current?.querySelector('[data-anim="hero-ctas"]');
+      const heroSim = heroSectionRef.current?.querySelector('[data-anim="hero-sim"]');
+
+      gsap.set([heroTitle, heroCopy, heroCtas, heroSim].filter(Boolean), { willChange: 'transform,opacity' });
+
+      gsap.timeline({ defaults: { ease: 'power3.out' } })
+        .from(heroTitle, { y: 16, opacity: 0, duration: 0.7 })
+        .from(heroCopy, { y: 12, opacity: 0, duration: 0.6 }, '-=0.35')
+        .from(heroCtas, { y: 10, opacity: 0, duration: 0.55 }, '-=0.3')
+        .from(heroSim, { y: 16, opacity: 0, duration: 0.7 }, '-=0.35');
+
+      gsap.utils.toArray('[data-anim="reveal"]').forEach((el) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 14,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+
+      gsap.utils.toArray('[data-anim="card"]').forEach((el) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 18,
+          duration: 0.75,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    }, heroSectionRef);
+
+    return () => ctx.revert();
+  }, [prefersReducedMotion]);
 
   // Se for uma página legal, renderiza apenas ela com Suspense
   if (currentView === 'terms') {
@@ -771,11 +963,20 @@ const App = () => {
           .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
           @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
           .animate-shimmer { background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%); background-size: 200% 100%; animation: shimmer 3s infinite linear; }
+          .hover-word { --timing: cubic-bezier(0.22, 0.61, 0.36, 1); --hover-color: rgba(16,185,129,0.9); display: inline-flex; gap: 0.02em; color: inherit; text-transform: inherit; line-height: 1.15; overflow: hidden; vertical-align: bottom; }
+          .hover-word > span { position: relative; display: inline-block; transform: translateY(0); transition: transform 0.85s var(--timing) var(--delay); will-change: transform; }
+          .hover-word > span::after { content: attr(data-char); position: absolute; left: 0; top: 100%; color: var(--hover-color); }
+          .hover-word:hover > span, .hover-word:focus-visible > span { transform: translateY(-100%); }
+          .hover-swap:hover .hover-word > span, .hover-swap:focus-within .hover-word > span { transform: translateY(-100%); }
+          .hover-swap.is-active .hover-word > span { transform: translateY(-100%); }
+          .hover-word-emerald { --hover-color: rgba(16,185,129,0.95); }
+          .hover-word-blue { --hover-color: rgba(59,130,246,0.95); }
+          .hover-word-white { --hover-color: rgba(255,255,255,0.98); }
         `}</style>
         
         <NavbarComponent />
 
-        <section className="relative pt-36 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group min-h-screen flex items-center">
+        <section ref={heroSectionRef} className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group min-h-screen flex items-center">
           {/* Premium cinematic background */}
           <PremiumBackground />
           {/* Parallax Effect on Background */}
@@ -783,18 +984,18 @@ const App = () => {
 
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-              <div className="flex-1 text-center lg:text-left space-y-6 max-w-2xl mx-auto lg:mx-0 sticky top-32 self-start">
-                <div className="space-y-3">
+              <div className="flex-1 text-center lg:text-left space-y-6 max-w-2xl mx-auto lg:mx-0 lg:sticky lg:top-32 self-start pb-6 sm:pb-8 lg:pb-0">
+                <div data-anim="hero-title" className="space-y-3">
                   <span className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase">É assim que escalamos</span>
                   <h1 className="text-4xl lg:text-5xl font-medium leading-[1.15] tracking-tight">
                     Atenda seus clientes em <Cover>velocidade máxima</Cover>
                   </h1>
                 </div>
-                <p className="text-lg text-gray-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light overflow-hidden">
+                <p data-anim="hero-copy" className="text-lg text-gray-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light overflow-hidden">
                   <ShimmerText>Atendimento inteligente que converte. Enquanto você foca no que importa, nossa IA qualifica, responde e agenda reuniões automaticamente.</ShimmerText>
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-                  <button 
+                <div data-anim="hero-ctas" className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                  <button
                     onClick={() => document.getElementById('agendar')?.scrollIntoView({ behavior: 'smooth' })}
                     className="px-6 py-3 bg-white text-black rounded-full font-semibold text-base hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_-5px_rgba(16,185,129,0.4)]"
                   >
@@ -803,7 +1004,7 @@ const App = () => {
                   <button className="px-6 py-3 bg-transparent text-white border border-white/20 rounded-full font-semibold text-base hover:bg-white/5 transition-all flex items-center justify-center gap-2">Ver Como Funciona</button>
                 </div>
               </div>
-              <div className="flex-1 w-full max-w-xl lg:max-w-none perspective-1000 relative mt-8 lg:mt-0 flex justify-center lg:justify-end">
+              <div data-anim="hero-sim" className="flex-1 w-full max-w-xl lg:max-w-none perspective-1000 relative mt-12 sm:mt-14 lg:mt-0 flex justify-center lg:justify-end">
                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-gradient-to-tr from-white/10 to-gray-500/10 blur-[90px] rounded-full -z-10"></div>
                  <WhatsAppSimulator />
               </div>
@@ -812,7 +1013,7 @@ const App = () => {
         </section>
 
         {/* Como Funciona */}
-        <section className="py-24 relative bg-[#050505]">
+        <section data-anim="reveal" className="py-16 sm:py-24 relative bg-[#050505]">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none"></div>
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
           <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -821,7 +1022,7 @@ const App = () => {
               <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white leading-[1.15]">Seu atendimento, <br/><span className="font-serif italic font-normal text-gray-400">só que melhor.</span></h2>
               <p className="text-gray-500 text-lg max-w-lg font-light leading-relaxed">Nada de robô travado. Criamos conversas naturais que seus clientes nem percebem que é IA.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 auto-rows-[minmax(280px,auto)]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 auto-rows-[minmax(240px,auto)] sm:auto-rows-[minmax(280px,auto)]">
               <BentoCard index={0} icon={Clock} label="Sempre presente" title="Responde quando você não pode" description="Sábado à noite, feriado, 3h da manhã. O lead manda mensagem e recebe resposta na hora. Sem espera, sem frustração." className="md:col-span-1 md:row-span-2" />
               <BentoCard index={1} icon={Cpu} label="Entende de verdade" title="Conversa como gente" description="Entende áudios, gírias, erros de digitação. Não é aquele chatbot chato de 'digite 1 para isso'. É uma conversa real." className="md:col-span-2" />
               <BentoCard index={2} icon={TrendingUp} label="Foco no resultado" title="Filtra quem vai comprar" description="Separa curiosos de compradores e avisa você só quando vale a pena. Agenda reuniões automaticamente." className="md:col-span-1" />
@@ -837,80 +1038,91 @@ const App = () => {
         <AboutSection />
         
         {/* Scheduling Section */}
-        <section id="agendar" className="py-24 relative bg-[#000000] border-t border-white/5">
+        <section id="agendar" data-anim="reveal" className="py-16 sm:py-24 relative bg-[#000000] border-t border-white/5">
           <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#050505] to-[#000000] pointer-events-none"></div>
           <div className="max-w-7xl mx-auto px-6 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-6xl font-medium mb-6 tracking-tight leading-tight text-white">
-                Agende sua <span className="text-emerald-500 font-serif italic">Demonstração</span>
+              <h2
+                className={`hover-swap text-4xl md:text-6xl font-medium mb-6 tracking-tight leading-tight text-white ${isScheduleTitleSwapOn ? 'is-active' : ''}`}
+                onMouseEnter={() => setIsScheduleTitleSwapOn(true)}
+                onMouseLeave={() => setIsScheduleTitleSwapOn(false)}
+                onClick={() => setIsScheduleTitleSwapOn(v => !v)}
+                tabIndex={0}
+                role="button"
+                aria-label="Alternar destaque do título"
+              >
+                <HoverWord text="Agende sua" className="hover-word-emerald" />{" "}
+                <span className="text-emerald-500 font-serif italic">
+                  <HoverWord text="Demonstração" className="hover-word-white" />
+                </span>
               </h2>
               <p className="text-gray-500 text-lg max-w-2xl mx-auto font-light">
                 Veja na prática como nossa automação pode transformar o atendimento da sua empresa.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
               {/* Card 1: Demonstração Online */}
-              <div className="group bg-[#0A0A0A] rounded-3xl p-8 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 flex flex-col items-center text-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-300">
-                  <Video size={28} className="text-gray-400 group-hover:text-emerald-400 transition-colors" />
+              <div data-anim="card" className="group bg-[#0A0A0A] rounded-3xl p-8 border border-white/8 hover:border-emerald-500/25 transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden hover:bg-white/[0.02] hover:shadow-[0_22px_55px_-45px_rgba(0,0,0,0.85)]">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+
+                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/25 transition-all duration-300">
+                  <Video size={28} className="text-gray-300 group-hover:text-emerald-300 transition-colors" />
                 </div>
-                
-                <h3 className="text-xl font-medium text-white mb-2">Demonstração Online</h3>
+                  
+                <h3 className="text-xl font-semibold text-white mb-2 tracking-tight">Demonstração Online</h3>
                 <p className="text-gray-500 text-sm mb-6 font-light">Reunião de 30 minutos via Google Meet</p>
-                
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-gray-400 text-xs font-medium mb-8 group-hover:border-emerald-500/20 group-hover:text-emerald-400/80 transition-colors">
+                  
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-medium mb-8 group-hover:border-emerald-500/25 group-hover:text-emerald-200/90 transition-colors">
                   <Clock size={12} /> 30 min
                 </div>
-                
-                <div className="w-full space-y-3 mb-8 text-left pl-4 border-l border-white/5 group-hover:border-emerald-500/20 transition-colors">
+                  
+                <div className="w-full space-y-3 mb-8 text-left pl-4 border-l border-white/10 group-hover:border-emerald-500/25 transition-colors">
                   <div className="flex items-center gap-3 text-sm text-gray-400">
-                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Apresentação personalizada
+                    <CheckCheck size={14} className="text-emerald-500/60 group-hover:text-emerald-300 shrink-0 transition-colors" /> Apresentação personalizada
                   </div>
                   <div className="flex items-center gap-3 text-sm text-gray-400">
-                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Análise do seu negócio
+                    <CheckCheck size={14} className="text-emerald-500/60 group-hover:text-emerald-300 shrink-0 transition-colors" /> Análise do seu negócio
                   </div>
                   <div className="flex items-center gap-3 text-sm text-gray-400">
-                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Proposta sob medida
+                    <CheckCheck size={14} className="text-emerald-500/60 group-hover:text-emerald-300 shrink-0 transition-colors" /> Proposta sob medida
                   </div>
                 </div>
 
                 <button 
                   onClick={() => setIsScheduleOpen(true)}
-                  className="w-full py-4 bg-white text-black rounded-xl font-bold text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-2 group/btn relative z-10"
+                  className="w-full py-4 bg-white text-black rounded-xl font-bold text-sm hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2 group/btn"
                 >
                   Agendar Agora <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                 </button>
               </div>
 
               {/* Card 2: Consultoria WhatsApp */}
-              <div className="group bg-[#0A0A0A] rounded-3xl p-8 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 flex flex-col items-center text-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div data-anim="card" className="group bg-[#0A0A0A] rounded-3xl p-8 border border-white/8 hover:border-emerald-500/25 transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden hover:bg-white/[0.02] hover:shadow-[0_22px_55px_-45px_rgba(0,0,0,0.85)]">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
                 
-                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-300">
-                  <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" className="text-gray-400 group-hover:text-emerald-400 transition-colors">
+                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/25 transition-all duration-300">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" className="text-gray-300 group-hover:text-emerald-300 transition-colors">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                   </svg>
                 </div>
                 
-                <h3 className="text-xl font-medium text-white mb-2">Consultoria via WhatsApp</h3>
+                <h3 className="text-xl font-semibold text-white mb-2 tracking-tight">Consultoria via WhatsApp</h3>
                 <p className="text-gray-500 text-sm mb-6 font-light">Conversa direta com nosso especialista</p>
                 
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-gray-400 text-xs font-medium mb-8 group-hover:border-emerald-500/20 group-hover:text-emerald-400/80 transition-colors">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-medium mb-8 group-hover:border-emerald-500/25 group-hover:text-emerald-200/90 transition-colors">
                   <Zap size={12} /> Imediato
                 </div>
                 
-                <div className="w-full space-y-3 mb-8 text-left pl-4 border-l border-white/5 group-hover:border-emerald-500/20 transition-colors">
+                <div className="w-full space-y-3 mb-8 text-left pl-4 border-l border-white/10 group-hover:border-emerald-500/25 transition-colors">
                   <div className="flex items-center gap-3 text-sm text-gray-400">
-                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Resposta rápida
+                    <CheckCheck size={14} className="text-emerald-500/60 group-hover:text-emerald-300 shrink-0 transition-colors" /> Resposta rápida
                   </div>
                   <div className="flex items-center gap-3 text-sm text-gray-400">
-                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Diagnóstico inicial
+                    <CheckCheck size={14} className="text-emerald-500/60 group-hover:text-emerald-300 shrink-0 transition-colors" /> Diagnóstico inicial
                   </div>
                   <div className="flex items-center gap-3 text-sm text-gray-400">
-                    <CheckCheck size={14} className="text-emerald-500/50 group-hover:text-emerald-400 shrink-0 transition-colors" /> Orientações personalizadas
+                    <CheckCheck size={14} className="text-emerald-500/60 group-hover:text-emerald-300 shrink-0 transition-colors" /> Orientações personalizadas
                   </div>
                 </div>
 
@@ -918,7 +1130,7 @@ const App = () => {
                   href="https://wa.me/5585991872205?text=Ol%C3%A1%20gostaria%20de%20tirar%20mais%20duvidas"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-4 bg-transparent border border-white/20 text-white rounded-xl font-bold text-sm hover:border-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-400 transition-all flex items-center justify-center gap-2 group/btn relative z-10"
+                  className="w-full py-4 bg-transparent border border-white/20 text-white rounded-xl font-bold text-sm hover:border-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-200 transition-all flex items-center justify-center gap-2 group/btn"
                 >
                   Falar no WhatsApp <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                 </a>
@@ -980,16 +1192,18 @@ const App = () => {
             </div>
             
             {/* Massive Brand Name - Static & Elegant */}
-            <div className="relative py-12 mb-16">
+            <div className="relative py-10 sm:py-12 mb-12 sm:mb-16 px-2">
               {/* Subtle gradient background */}
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/30 to-transparent"></div>
               
               <h2 
-                className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none tracking-tighter select-none text-center" 
+                className="text-[clamp(2.6rem,12vw,8.5rem)] font-extrabold leading-none tracking-[-0.06em] select-none text-center"
                 style={{ 
-                  color: '#0d0d0d',
-                  textShadow: '0 6px 16px rgba(255,255,255,0.06), 0 2px 4px rgba(255,255,255,0.04), 0 0 80px rgba(16,185,129,0.02)',
-                  WebkitTextStroke: '1px rgba(255,255,255,0.015)'
+                  color: 'rgba(255,255,255,0.012)',
+                  WebkitTextStroke: '1px rgba(255,255,255,0.055)',
+                  textShadow: '0 18px 34px rgba(0,0,0,0.78), 0 0 60px rgba(16,185,129,0.02)',
+                  WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 28%, rgba(0,0,0,1) 70%)',
+                  maskImage: 'linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 28%, rgba(0,0,0,1) 70%)'
                 }}
               >
                 TOFTSOLUTIONS
