@@ -1,5 +1,7 @@
 import React from 'react';
 import { Zap, Clock, Cpu, TrendingUp, Lock, CheckCheck } from 'lucide-react';
+import n8nFlow from '../assets/n8n-flow.png';
+import n8nFilter from '../assets/n8n-filter.png';
 
 const StickyJourney = () => {
   return (
@@ -61,7 +63,8 @@ const StickyJourney = () => {
                   subtitle: "IA Contextual",
                   desc: "Esqueça os menus numéricos. Nossa IA compreende áudios, gírias e intenções complexas como um humano faria.",
                   highlight: "Processamento de Linguagem Natural v3.0",
-                  color: "blue"
+                  color: "blue",
+                  bgImage: n8nFlow
                 },
                 {
                   step: "03",
@@ -70,7 +73,8 @@ const StickyJourney = () => {
                   subtitle: "Qualificação Automática",
                   desc: "Separa curiosos de compradores reais. Agenda reuniões apenas com leads qualificados direto na sua agenda.",
                   highlight: "+40% na taxa de conversão",
-                  color: "purple"
+                  color: "purple",
+                  bgImage: n8nFilter
                 },
                 {
                   step: "04",
@@ -91,8 +95,16 @@ const StickyJourney = () => {
                   {/* Card Content */}
                   <div 
                     data-anim="sticky-card"
-                    className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden"
+                    className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden min-h-[320px] flex flex-col justify-center"
                   >
+                     {/* Branded Background Image if exists */}
+                     {item.bgImage && (
+                       <div className="absolute inset-0 z-0 opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none">
+                         <img src={item.bgImage} alt="" className="w-full h-full object-cover grayscale brightness-75 contrast-125 scale-110 group-hover:scale-100 transition-transform duration-1000" />
+                         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-[#0A0A0A]/80"></div>
+                       </div>
+                     )}
+
                      {/* Spotlight Effect Gradient */}
                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.05),transparent_40%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
