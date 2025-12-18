@@ -190,7 +190,7 @@ const NavbarComponent = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center gap-3 group cursor-pointer">
-              <svg width="180" height="52" viewBox="0 0 280 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-300">
+              <svg width="220" height="52" viewBox="0 0 350 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-300">
                 <defs>
                   <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#10b981" />
@@ -732,8 +732,13 @@ const App = () => {
     // Initialize Clarity
     clarity.init('ulyfx4cizz');
 
+    // Prevent context menu (right click)
+    const handleContextMenu = (e) => e.preventDefault();
+    document.addEventListener('contextmenu', handleContextMenu);
+
     return () => {
       if (finishTimeout) window.clearTimeout(finishTimeout);
+      document.removeEventListener('contextmenu', handleContextMenu);
     };
   }, []);
 
@@ -1069,10 +1074,25 @@ const App = () => {
               {/* Logo e Descrição */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 group cursor-pointer">
-                  <div className="w-10 h-10 bg-gradient-to-br from-white to-gray-200 text-black rounded-xl flex items-center justify-center font-serif font-bold text-xl shadow-lg group-hover:shadow-emerald-500/20 transition-all">
-                    T
-                  </div>
-                  <span className="text-2xl font-bold text-white tracking-tight">ToftSolutions</span>
+                  <svg width="220" height="52" viewBox="0 0 350 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-300">
+                    <defs>
+                      <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#10b981" />
+                        <stop offset="100%" stopColor="#059669" />
+                      </linearGradient>
+                    </defs>
+                    <rect x="0" y="15" width="50" height="50" rx="10" fill="url(#gradient1)"/>
+                    {/* Ondas digitais */}
+                    <path d="M15 35 Q20 30, 25 35 T35 35" stroke="white" strokeWidth="2" fill="none"/>
+                    <path d="M15 40 Q20 35, 25 40 T35 40" stroke="white" strokeWidth="2" fill="none" opacity="0.7"/>
+                    <path d="M15 45 Q20 40, 25 45 T35 45" stroke="white" strokeWidth="2" fill="none" opacity="0.4"/>
+                    <text x="65" y="52" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '36px', fontWeight: 700, fill: 'white' }}>
+                      Toft
+                    </text>
+                    <text x="145" y="52" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '36px', fontWeight: 700, fill: '#10b981' }}>
+                      Solutions
+                    </text>
+                  </svg>
                 </div>
                 <p className="text-gray-400 text-sm leading-relaxed max-w-md font-light">
                   Empoderando empresas com inteligência artificial conversacional. O futuro das vendas é automático, elegante e invisível.
