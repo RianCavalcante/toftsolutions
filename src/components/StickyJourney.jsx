@@ -1,7 +1,5 @@
 import React from 'react';
 import { Zap, Clock, Cpu, TrendingUp, Lock, CheckCheck } from 'lucide-react';
-import n8nFlow from '../assets/n8n-flow.png';
-import n8nFilter from '../assets/n8n-filter.png';
 
 const StickyJourney = () => {
   const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
@@ -73,8 +71,7 @@ const StickyJourney = () => {
                   subtitle: "IA Contextual",
                   desc: "Esqueça os menus numéricos. Nossa IA compreende áudios, gírias e intenções complexas como um humano faria.",
                   highlight: "Processamento de Linguagem Natural v3.0",
-                  color: "blue",
-                  bgImage: n8nFlow
+                  color: "blue"
                 },
                 {
                   step: "03",
@@ -83,8 +80,7 @@ const StickyJourney = () => {
                   subtitle: "Qualificação Automática",
                   desc: "Separa curiosos de compradores reais. Agenda reuniões apenas com leads qualificados direto na sua agenda.",
                   highlight: "+40% na taxa de conversão",
-                  color: "purple",
-                  bgImage: n8nFilter
+                  color: "purple"
                 },
                 {
                   step: "04",
@@ -111,20 +107,6 @@ const StickyJourney = () => {
                       data-anim="sticky-card"
                       className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden min-h-[320px] flex flex-col justify-center"
                     >
-                       {/* Branded Background Image with depth effect */}
-                       {item.bgImage && (
-                         <div className="absolute inset-0 z-0 opacity-15 group-hover:opacity-35 transition-all duration-700 pointer-events-none">
-                           <img 
-                             src={item.bgImage} 
-                             alt="" 
-                             className="w-full h-full object-cover grayscale brightness-75 contrast-125 blur-[2px] group-hover:blur-0 scale-110 group-hover:scale-100 transition-all duration-1000" 
-                           />
-                           {/* Improved masking for readability */}
-                           <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent"></div>
-                           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent"></div>
-                         </div>
-                       )}
-
                        {/* Dynamic Spotlight Effect */}
                        <div 
                          className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
