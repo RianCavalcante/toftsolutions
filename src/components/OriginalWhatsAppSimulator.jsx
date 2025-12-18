@@ -111,8 +111,21 @@ const WhatsAppSimulator = () => {
 
   const addMessage = (msg) => setMessages((prev) => [...prev, msg]);
 
+  const handleSimulatorClick = (e) => {
+    // Apenas abre o WhatsApp se o clique não foi em um elemento interativo
+    if (!e.target.closest('[role="button"]')) {
+      window.open('https://wa.me/5585991872205?text=Olá!%20Vi%20a%20simulação%20no%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20automação%20de%20WhatsApp.', '_blank');
+    }
+  };
+
   return (
-    <div className="w-full max-w-2xl bg-[#0b141a] rounded-xl overflow-hidden shadow-2xl border border-purple-500/20 relative flex flex-col mx-auto lg:mx-0 h-[380px] z-20 backdrop-blur-sm">
+    <div 
+      onClick={handleSimulatorClick}
+      className="w-full max-w-2xl bg-[#0b141a] rounded-xl overflow-hidden shadow-2xl border border-purple-500/20 relative flex flex-col mx-auto lg:mx-0 h-[380px] z-20 backdrop-blur-sm cursor-pointer group hover:border-emerald-500/40 transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.3)]"
+      role="button"
+      aria-label="Clique para conversar no WhatsApp"
+      title="Clique para falar comigo no WhatsApp"
+    >
       <div className="bg-[#202c33] px-4 py-2 flex items-center justify-between z-20 shadow-md border-b border-gray-700">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -134,14 +147,29 @@ const WhatsAppSimulator = () => {
         <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-3 z-10 custom-scrollbar scroll-smooth">
           <div className="flex justify-center mb-4"><span className="bg-[#1f2c34] text-gray-300 text-[10px] py-0.5 px-2 rounded shadow-sm uppercase font-semibold tracking-wider border border-white/5">Hoje</span></div>
           <div className="flex justify-center mb-6"><div className="bg-[#1f2c34] text-[#ffd279] text-xs py-1.5 px-3 rounded-lg text-center max-w-sm border border-yellow-600/20">🔒 Mensagens criptografadas</div></div>
-          {messages.map((msg) => (
-            <div key={msg.id} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] rounded-lg p-2 px-3 text-[13px] shadow-md relative ${msg.sender === 'user' ? 'bg-[#005c4b] text-white rounded-tr-none' : 'bg-[#202c33] text-white rounded-tl-none'}`}>
-                <p className="leading-relaxed text-[14px]">{msg.text}</p>
-                <div className="flex items-center justify-end gap-1 mt-1"><span className="text-[10px] text-gray-400">{msg.time}</span>{msg.sender === 'user' && (<CheckCheck size={12} className="text-[#53bdeb]" />)}</div>
+          {messages.map((msg) => {
+            const isCtaMessage = msg.sender === 'user' && msg.text === "Quero automatizar meu atendimento no WhatsApp";
+            
+            return (
+              <div key={msg.id} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div 
+                  onClick={isCtaMessage ? (e) => {
+                    e.stopPropagation();
+                    window.open('https://wa.me/5585991872205?text=Olá!%20Vi%20a%20simulação%20e%20quero%20automatizar%20meu%20atendimento%20no%20WhatsApp!', '_blank');
+                  } : undefined}
+                  className={`max-w-[80%] rounded-lg p-2 px-3 text-[13px] shadow-md relative ${
+                    msg.sender === 'user' 
+                      ? `bg-[#005c4b] text-white rounded-tr-none ${isCtaMessage ? 'cursor-pointer hover:bg-[#00704f] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ring-1 ring-emerald-400/30' : ''}` 
+                      : 'bg-[#202c33] text-white rounded-tl-none'
+                  }`}
+                  title={isCtaMessage ? 'Clique para falar comigo no WhatsApp!' : undefined}
+                >
+                  <p className="leading-relaxed text-[14px]">{msg.text}</p>
+                  <div className="flex items-center justify-end gap-1 mt-1"><span className="text-[10px] text-gray-400">{msg.time}</span>{msg.sender === 'user' && (<CheckCheck size={12} className="text-[#53bdeb]" />)}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           {isBotTyping && (<div className="flex w-full justify-start relative animate-fade-in"><div className="bg-[#202c33] p-2 rounded-xl rounded-tl-none flex items-center gap-1 shadow-sm w-12"><div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div><div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div><div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div></div></div>)}
         </div>
         <div className="bg-[#202c33] px-3 py-2 flex items-center gap-3 z-20 border-t border-gray-700">
@@ -151,7 +179,21 @@ const WhatsAppSimulator = () => {
             <span className="text-white text-sm line-clamp-1">{inputValue}<span className="animate-pulse border-r-2 border-white ml-0.5 inline-block align-middle h-4"></span></span>
             {!inputValue && <span className="text-gray-400 text-sm">Mensagem</span>}
           </div>
-          {inputValue ? (<Send size={20} className="text-[#00a884] cursor-pointer" role="button" aria-label="Enviar mensagem" />) : (<Mic size={20} className="text-gray-400 cursor-pointer hover:text-gray-200" role="button" aria-label="Gravar áudio" />)}
+          {inputValue ? (
+            <Send 
+              size={20} 
+              className="text-[#00a884] cursor-pointer hover:text-emerald-400 transition-colors" 
+              role="button" 
+              aria-label="Falar no WhatsApp" 
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open('https://wa.me/5585991872205?text=Olá!%20Vi%20a%20simulação%20e%20quero%20automatizar%20meu%20atendimento%20no%20WhatsApp!', '_blank');
+              }}
+              title="Clique para conversar comigo no WhatsApp!"
+            />
+          ) : (
+            <Mic size={20} className="text-gray-400 cursor-pointer hover:text-gray-200" role="button" aria-label="Gravar áudio" />
+          )}
         </div>
       </div>
     </div>

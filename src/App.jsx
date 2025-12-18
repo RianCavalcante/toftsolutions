@@ -333,21 +333,32 @@ const PremiumBenefitsSection = () => {
       title: "Resposta Instantânea",
       description: "Atendimento em tempo real. Seu cliente recebe atenção no momento que precisa.",
       metric: "< 3s",
-      metricLabel: "tempo médio"
+      metricLabel: "tempo médio",
+      containerClass: "bg-black border border-emerald-500/20 animate-subtle-pulse shadow-[0_0_15px_-3px_rgba(16,185,129,0.15)]",
+      iconClass: "text-emerald-400"
     },
     {
       icon: <TrendingUp size={24} strokeWidth={1.5} />,
       title: "Economia Real",
       description: "Reduza até 80% dos custos com atendimento humano repetitivo.",
       metric: "80%",
-      metricLabel: "redução de custos"
+      metricLabel: "redução de custos",
+      containerClass: "bg-black border border-emerald-500/20 animate-subtle-pulse shadow-[0_0_15px_-3px_rgba(16,185,129,0.15)]",
+      iconClass: "text-emerald-400"
     },
     {
-      icon: <Clock size={24} strokeWidth={1.5} />,
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-400">
+          <path d="M7 12l5 5L22 7" />
+          <path d="M2 12l5 5m5-5l5-5" />
+        </svg>
+      ),
       title: "Sempre Online",
       description: "24 horas por dia, 7 dias por semana. Nunca perca uma oportunidade.",
       metric: "24/7",
-      metricLabel: "disponibilidade"
+      metricLabel: "disponibilidade",
+      containerClass: "bg-black border border-emerald-500/20 animate-subtle-pulse shadow-[0_0_15px_-3px_rgba(16,185,129,0.15)]",
+      iconClass: "text-emerald-400"
     },
     {
       icon: <i className="fi fi-ts-users text-2xl"></i>,
@@ -535,7 +546,10 @@ const PremiumBenefitsSection = () => {
         {/* Bottom CTA */}
         <div className="text-center mt-16">
           <p className="text-gray-600 text-sm mb-4">Transforme a forma como você se conecta com seus clientes</p>
-          <button className="px-8 py-4 bg-white text-black rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 flex items-center gap-2 mx-auto group">
+          <button 
+            onClick={() => document.getElementById('agendar')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-8 py-4 bg-white text-black rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 flex items-center gap-2 mx-auto group"
+          >
             Quero esses resultados
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </button>
