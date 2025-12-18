@@ -4,6 +4,16 @@ import n8nFlow from '../assets/n8n-flow.png';
 import n8nFilter from '../assets/n8n-filter.png';
 
 const StickyJourney = () => {
+  const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e, cardRef) => {
+    const rect = cardRef.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
   return (
     <section className="relative bg-[#050505] py-20 lg:py-32">
        {/* Background Mesh */}
@@ -85,54 +95,70 @@ const StickyJourney = () => {
                   highlight: "Criptografia Ponta-a-Ponta",
                   color: "orange"
                 }
-              ].map((item, idx) => (
-                <div key={idx} className="relative pl-20 lg:pl-28 group">
-                  {/* Nó da linha do tempo */}
-                  <div className="absolute left-[30px] lg:left-[46px] top-0 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-emerald-500/30 bg-[#050505] group-hover:bg-emerald-500 group-hover:scale-125 transition-all duration-500 z-10 flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  </div>
+              ].map((item, idx) => {
+                const cardRef = React.useRef(null);
+                return (
+                  <div key={idx} className="relative pl-20 lg:pl-28 group">
+                    {/* Nó da linha do tempo */}
+                    <div className="absolute left-[30px] lg:left-[46px] top-0 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-emerald-500/30 bg-[#050505] group-hover:bg-emerald-500 group-hover:scale-125 transition-all duration-500 z-10 flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
 
-                  {/* Card Content */}
-                  <div 
-                    data-anim="sticky-card"
-                    className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden min-h-[320px] flex flex-col justify-center"
-                  >
-                     {/* Branded Background Image if exists */}
-                     {item.bgImage && (
-                       <div className="absolute inset-0 z-0 opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none">
-                         <img src={item.bgImage} alt="" className="w-full h-full object-cover grayscale brightness-75 contrast-125 scale-110 group-hover:scale-100 transition-transform duration-1000" />
-                         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-[#0A0A0A]/80"></div>
-                       </div>
-                     )}
-
-                     {/* Spotlight Effect Gradient */}
-                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.05),transparent_40%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                     <div className="relative z-10">
-                       <div className="flex justify-between items-start mb-6">
-                         <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-500">
-                           <item.icon size={26} className="text-gray-400 group-hover:text-emerald-400 transition-colors" />
+                    {/* Card Content */}
+                    <div 
+                      ref={cardRef}
+                      onMouseMove={(e) => handleMouseMove(e, cardRef.current)}
+                      data-anim="sticky-card"
+                      className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden min-h-[320px] flex flex-col justify-center"
+                    >
+                       {/* Branded Background Image with depth effect */}
+                       {item.bgImage && (
+                         <div className="absolute inset-0 z-0 opacity-15 group-hover:opacity-35 transition-all duration-700 pointer-events-none">
+                           <img 
+                             src={item.bgImage} 
+                             alt="" 
+                             className="w-full h-full object-cover grayscale brightness-75 contrast-125 blur-[2px] group-hover:blur-0 scale-110 group-hover:scale-100 transition-all duration-1000" 
+                           />
+                           {/* Improved masking for readability */}
+                           <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent"></div>
+                           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent"></div>
                          </div>
-                         <span className="text-5xl font-bold text-white/[0.03] group-hover:text-emerald-500/[0.05] transition-colors font-serif select-none pointer-events-none">
-                           {item.step}
-                         </span>
-                       </div>
+                       )}
 
-                       <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">{item.title}</h3>
-                       <span className="text-xs font-mono uppercase tracking-wider text-emerald-600/80 mb-4 block">{item.subtitle}</span>
-                       
-                       <p className="text-gray-400 leading-relaxed font-light mb-6 group-hover:text-gray-300 transition-colors">
-                         {item.desc}
-                       </p>
+                       {/* Dynamic Spotlight Effect */}
+                       <div 
+                         className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                         style={{
+                           background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(16,185,129,0.06), transparent 40%)`
+                         }}
+                       ></div>
 
-                       {/* Highlight Pills */}
-                       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs font-medium text-emerald-400/80 mt-2 hover:bg-emerald-500/10 transition-colors cursor-default">
-                         <CheckCheck size={12} /> <span dangerouslySetInnerHTML={{__html: item.highlight}}></span>
+                       <div className="relative z-10">
+                         <div className="flex justify-between items-start mb-6">
+                           <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-500">
+                             <item.icon size={26} className="text-gray-400 group-hover:text-emerald-400 transition-colors" />
+                           </div>
+                           <span className="text-5xl font-bold text-white/[0.03] group-hover:text-emerald-500/[0.05] transition-colors font-serif select-none pointer-events-none">
+                             {item.step}
+                           </span>
+                         </div>
+
+                         <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">{item.title}</h3>
+                         <span className="text-xs font-mono uppercase tracking-wider text-emerald-600/80 mb-4 block">{item.subtitle}</span>
+                         
+                         <p className="text-gray-400 leading-relaxed font-light mb-6 group-hover:text-gray-300 transition-colors">
+                           {item.desc}
+                         </p>
+
+                         {/* Highlight Pills */}
+                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs font-medium text-emerald-400/80 mt-2 hover:bg-emerald-500/10 transition-colors cursor-default">
+                           <CheckCheck size={12} /> <span dangerouslySetInnerHTML={{__html: item.highlight}}></span>
+                         </div>
                        </div>
-                     </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
            </div>
          </div>
        </div>
