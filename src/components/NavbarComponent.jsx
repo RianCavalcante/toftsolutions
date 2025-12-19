@@ -12,9 +12,9 @@ const NavbarComponent = () => {
   }, []);
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${scrolled ? 'bg-[#000000]/80 backdrop-blur-xl border-white/5 py-3' : 'bg-transparent border-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-14">
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${scrolled ? 'bg-[#000000]/80 backdrop-blur-xl border-white/5 py-3' : 'bg-transparent border-transparent py-4 sm:py-6'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           <div className="flex items-center gap-3 group cursor-pointer">
               <svg width="220" height="52" viewBox="0 0 350 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-300">
                 <defs>

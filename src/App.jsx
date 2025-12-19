@@ -77,11 +77,15 @@ const App = () => {
           .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
           @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
           .animate-shimmer { background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%); background-size: 200% 100%; animation: shimmer 3s infinite linear; }
-          .hover-word { --timing: cubic-bezier(0.22, 0.61, 0.36, 1); --hover-color: rgba(16,185,129,0.9); display: inline-flex; gap: 0.02em; color: inherit; text-transform: inherit; line-height: 1.15; overflow: hidden; vertical-align: bottom; }
+          .hover-word { --timing: cubic-bezier(0.22, 0.61, 0.36, 1); --hover-color: rgba(16,185,129,0.9); display: inline-flex; gap: 0.02em; color: inherit; text-transform: inherit; line-height: inherit; overflow: hidden; vertical-align: bottom; }
           .hover-word > span { position: relative; display: inline-block; transform: translateY(0); transition: transform 0.85s var(--timing) var(--delay); will-change: transform; }
-          .hover-word > span::after { content: attr(data-char); position: absolute; left: 0; top: 100%; color: var(--hover-color); }
-          .hover-word:hover > span, .hover-word:focus-visible > span { transform: translateY(-100%); }
-          .hover-swap:hover .hover-word > span, .hover-swap:focus-within .hover-word > span { transform: translateY(-100%); }
+          .hover-word > span::after { content: attr(data-char); position: absolute; left: 0; top: 100%; color: var(--hover-color); pointer-events: none; }
+          
+          @media (min-width: 1024px) {
+            .hover-word:hover > span, .hover-word:focus-visible > span { transform: translateY(-100%); }
+            .hover-swap:hover .hover-word > span, .hover-swap:focus-within .hover-word > span { transform: translateY(-100%); }
+            .hover-swap.is-active .hover-word > span { transform: translateY(-100%); }
+          }
           .hover-swap.is-active .hover-word > span { transform: translateY(-100%); }
           .hover-word-emerald { --hover-color: rgba(16,185,129,0.95); }
           .hover-word-blue { --hover-color: rgba(59,130,246,0.95); }

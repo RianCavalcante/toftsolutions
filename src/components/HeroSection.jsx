@@ -40,7 +40,7 @@ const HeroSection = () => {
   }, [prefersReducedMotion]);
 
   return (
-    <section ref={heroSectionRef} className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group min-h-[100svh] flex items-center">
+    <section ref={heroSectionRef} className="relative pt-28 sm:pt-36 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden group min-h-[100svh] flex items-center">
       {/* Premium cinematic background */}
       <PremiumBackground />
       {/* Parallax Effect on Background */}
@@ -52,7 +52,7 @@ const HeroSection = () => {
             <div data-anim="hero-title" className="space-y-3">
               <span className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase">É assim que escalamos</span>
               <h1
-                className={`hover-swap text-4xl lg:text-5xl font-medium leading-[1.15] tracking-tight ${isHeroTitleSwapOn ? 'is-active' : ''}`}
+                className={`hover-swap text-[1.75rem] leading-[1.25] sm:text-4xl lg:text-5xl font-medium tracking-tight ${isHeroTitleSwapOn ? 'is-active' : ''}`}
                 onMouseEnter={() => setIsHeroTitleSwapOn(true)}
                 onMouseLeave={() => setIsHeroTitleSwapOn(false)}
                 onClick={() => setIsHeroTitleSwapOn(v => !v)}

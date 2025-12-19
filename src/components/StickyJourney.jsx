@@ -25,9 +25,9 @@ const StickyJourney = () => {
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-medium uppercase tracking-widest mb-1 shadow-[0_0_15px_-3px_rgba(16,185,129,0.2)]">
                   <Zap size={10} className="fill-emerald-400" /> A Jornada Inteligente
                 </div>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.1]">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.2] lg:leading-[1.1]">
                   Seu atendimento, <br/>
-                  <span className="font-serif italic font-normal text-gray-400">reimaginado.</span>
+                  <span className="font-serif italic font-normal text-gray-400 block mt-2 lg:mt-0">reimaginado.</span>
                 </h2>
                 <p className="text-gray-500 text-lg font-light leading-relaxed max-w-sm">
                   Uma experiência fluida onde cada interação é uma oportunidade de encantar. Acompanhe o fluxo.
@@ -39,18 +39,18 @@ const StickyJourney = () => {
            </div>
 
            {/* Mobile Header (Non-sticky) */}
-           <div className="lg:hidden mb-12 space-y-6 text-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-medium uppercase tracking-widest mb-1">
-                <Zap size={10} className="fill-emerald-400" /> A Jornada Inteligente
-              </div>
-              <h2 className="text-4xl font-medium tracking-tight text-white leading-[1.1]">
-                Seu atendimento, <br/>
-                <span className="font-serif italic font-normal text-gray-400">reimaginado.</span>
-              </h2>
-           </div>
+            <div className="lg:hidden mb-12 space-y-6 text-center">
+               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-medium uppercase tracking-widest mb-1">
+                 <Zap size={10} className="fill-emerald-400" /> A Jornada Inteligente
+               </div>
+               <h2 className="text-[2.2rem] leading-tight font-medium tracking-tight text-white">
+                 Seu atendimento, <br/>
+                 <span className="font-serif italic font-normal text-gray-400 block mt-2">reimaginado.</span>
+               </h2>
+            </div>
 
-           {/* Lado Direito - Scrollable Cards */}
-           <div className="lg:w-2/3 space-y-[30vh] lg:space-y-[40vh] py-[15vh] lg:py-[25vh] relative">
+            {/* Lado Direito - Scrollable Cards */}
+            <div className="lg:w-2/3 space-y-8 sm:space-y-16 lg:space-y-[40vh] py-8 lg:py-[25vh] relative">
               {/* Linha de Conexão Contínua */}
               <div className="absolute left-8 lg:left-12 top-0 bottom-0 w-px bg-white/5 hidden sm:block"></div>
 
@@ -105,7 +105,7 @@ const StickyJourney = () => {
                       ref={cardRef}
                       onMouseMove={(e) => handleMouseMove(e, cardRef.current)}
                       data-anim="sticky-card"
-                      className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden min-h-[320px] flex flex-col justify-center"
+                      className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-6 sm:p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden min-h-[280px] sm:min-h-[320px] flex flex-col justify-center"
                     >
                        {/* Dynamic Spotlight Effect */}
                        <div 
