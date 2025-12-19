@@ -42,9 +42,18 @@ const App = () => {
     const handleContextMenu = (e) => e.preventDefault();
     document.addEventListener('contextmenu', handleContextMenu);
 
+    // Handle custom events from mobile menu
+    const handleOpenTerms = () => setCurrentView('terms');
+    const handleOpenPrivacy = () => setCurrentView('privacy');
+
+    window.addEventListener('openTerms', handleOpenTerms);
+    window.addEventListener('openPrivacy', handleOpenPrivacy);
+
     return () => {
       if (finishTimeout) window.clearTimeout(finishTimeout);
       document.removeEventListener('contextmenu', handleContextMenu);
+      window.removeEventListener('openTerms', handleOpenTerms);
+      window.removeEventListener('openPrivacy', handleOpenPrivacy);
     };
   }, []);
 
@@ -90,6 +99,16 @@ const App = () => {
           .hover-word-emerald { --hover-color: rgba(16,185,129,0.95); }
           .hover-word-blue { --hover-color: rgba(59,130,246,0.95); }
           .hover-word-white { --hover-color: rgba(255,255,255,0.98); }
+
+          /* Menu Animations */
+          @keyframes menuSlideIn { 0% { transform: translateX(-100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+          @keyframes menuItemGlow { 0%, 100% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.3); } 50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); } }
+          @keyframes ripple { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(4); opacity: 0; } }
+          @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+
+          .menu-ripple { animation: ripple 0.6s ease-out; }
+          .menu-float { animation: float 3s ease-in-out infinite; }
+          .menu-glow { animation: menuItemGlow 2s ease-in-out infinite; }
 
           /* Mobile optimizations */
           @media (max-width: 480px) {
@@ -144,6 +163,37 @@ const App = () => {
             inset: 0;
             background: radial-gradient(1200px 520px at 50% 55%, rgba(0,0,0,0.75), transparent 60%);
             opacity: 0.9;
+          }
+
+          /* Menu mobile animations */
+          .mobile-menu-enter {
+            animation: menuSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
+
+          .mobile-menu-exit {
+            animation: menuSlideOut 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+          }
+
+          @keyframes menuSlideIn {
+            from {
+              opacity: 0;
+              transform: translateX(100%);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+
+          @keyframes menuSlideOut {
+            from {
+              opacity: 1;
+              transform: translateX(0);
+            }
+            to {
+              opacity: 0;
+              transform: translateX(100%);
+            }
           }
         `}</style>
         

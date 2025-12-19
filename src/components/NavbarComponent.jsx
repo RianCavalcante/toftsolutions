@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, ArrowRight, MessageCircle } from 'lucide-react';
+import { gsap } from 'gsap';
 
 const NavbarComponent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuRef = useRef(null);
+  const menuItemsRef = useRef([]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -11,61 +14,248 @@ const NavbarComponent = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Animações do menu mobile
+  useEffect(() => {
+    if (isMenuOpen) {
+      // Animação de abertura do menu
+      gsap.set(menuRef.current, { display: 'block' });
+      gsap.fromTo(menuRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: 'power2.out' }
+      );
+
+      // Animação dos itens do menu
+      gsap.fromTo(menuItemsRef.current,
+        {
+          y: 30,
+          opacity: 0,
+          rotateX: -15
+        },
+        {
+          y: 0,
+          opacity: 1,
+          rotateX: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power3.out',
+          delay: 0.2
+        }
+      );
+    } else {
+      // Animação de fechamento
+      gsap.to(menuItemsRef.current, {
+        y: -20,
+        opacity: 0,
+        rotateX: 15,
+        duration: 0.3,
+        stagger: 0.05,
+        ease: 'power2.in'
+      });
+
+      gsap.to(menuRef.current, {
+        opacity: 0,
+        duration: 0.3,
+        ease: 'power2.in',
+        onComplete: () => gsap.set(menuRef.current, { display: 'none' })
+      });
+    }
+  }, [isMenuOpen]);
+
+  const handleMenuClick = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  const menuItems = [
+    { name: 'Método', href: '#' },
+    { name: 'Soluções', href: '#' },
+    { name: 'Resultados', href: '#' },
+  ];
+
+  const legalItems = [
+    { name: 'Termo de Uso', action: () => window.dispatchEvent(new CustomEvent('openTerms')) },
+    { name: 'Privacidade', action: () => window.dispatchEvent(new CustomEvent('openPrivacy')) },
+  ];
+
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${scrolled ? 'bg-[#000000]/80 backdrop-blur-xl border-white/5 py-2 sm:py-3' : 'bg-transparent border-transparent py-3 sm:py-4 lg:py-6'}`}>
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
-        <div className="flex items-center justify-between h-12 sm:h-14 lg:h-16">
-          <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer">
-              <svg width="160" height="36" viewBox="0 0 250 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-300 sm:w-[200px] sm:h-[44px] lg:w-[220px] lg:h-[52px]">
-                <defs>
-                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#10b981" />
-                    <stop offset="100%" stopColor="#059669" />
-                  </linearGradient>
-                </defs>
-                <rect x="0" y="10" width="35" height="35" rx="8" fill="url(#gradient1)" className="sm:w-[42px] sm:h-[42px] lg:w-[50px] lg:h-[50px]"/>
-                {/* Ondas digitais */}
-                <path d="M10 25 Q13 22, 17.5 25 T27.5 25" stroke="white" strokeWidth="1.5" fill="none" className="sm:stroke-2"/>
-                <path d="M10 28 Q13 25, 17.5 28 T27.5 28" stroke="white" strokeWidth="1.5" fill="none" opacity="0.7" className="sm:stroke-2"/>
-                <path d="M10 31 Q13 28, 17.5 31 T27.5 31" stroke="white" strokeWidth="1.5" fill="none" opacity="0.4" className="sm:stroke-2"/>
-                <text x="45" y="36" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '24px', fontWeight: 700, fill: 'white' }} className="sm:text-[28px] lg:text-[36px]">
-                  Toft
-                </text>
-                <text x="105" y="36" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '24px', fontWeight: 700, fill: '#10b981' }} className="sm:text-[28px] lg:text-[36px]">
-                  Solutions
-                </text>
-              </svg>
-          </div>
-          <div className="hidden md:flex items-center gap-1">
-            {['Método', 'Soluções', 'Resultados'].map((item) => (
+    <>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${scrolled ? 'bg-[#000000]/80 backdrop-blur-xl border-white/5 py-2 sm:py-3' : 'bg-transparent border-transparent py-3 sm:py-4 lg:py-6'}`}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <div className="flex items-center justify-between h-12 sm:h-14 lg:h-16">
+            <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer">
+                <svg width="160" height="36" viewBox="0 0 250 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-300 sm:w-[200px] sm:h-[44px] lg:w-[220px] lg:h-[52px]">
+                  <defs>
+                    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#10b981" />
+                      <stop offset="100%" stopColor="#059669" />
+                    </linearGradient>
+                  </defs>
+                  <rect x="0" y="10" width="35" height="35" rx="8" fill="url(#gradient1)" className="sm:w-[42px] sm:h-[42px] lg:w-[50px] lg:h-[50px]"/>
+                  {/* Ondas digitais */}
+                  <path d="M10 25 Q13 22, 17.5 25 T27.5 25" stroke="white" strokeWidth="1.5" fill="none" className="sm:stroke-2"/>
+                  <path d="M10 28 Q13 25, 17.5 28 T27.5 28" stroke="white" strokeWidth="1.5" fill="none" opacity="0.7" className="sm:stroke-2"/>
+                  <path d="M10 31 Q13 28, 17.5 31 T27.5 31" stroke="white" strokeWidth="1.5" fill="none" opacity="0.4" className="sm:stroke-2"/>
+                  <text x="45" y="36" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '24px', fontWeight: 700, fill: 'white' }} className="sm:text-[28px] lg:text-[36px]">
+                    Toft
+                  </text>
+                  <text x="105" y="36" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '24px', fontWeight: 700, fill: '#10b981' }} className="sm:text-[28px] lg:text-[36px]">
+                    Solutions
+                  </text>
+                </svg>
+            </div>
+            <div className="hidden md:flex items-center gap-1">
+              {['Método', 'Soluções', 'Resultados'].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  className="relative px-3 sm:px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-all duration-300 group"
+                >
+                  {item}
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-emerald-400 to-emerald-500 group-hover:w-3/4 transition-all duration-300 rounded-full"></span>
+                </a>
+              ))}
+            </div>
+            <div className="hidden md:flex items-center gap-4 sm:gap-6">
               <a
-                key={item}
-                href="#"
-                className="relative px-3 sm:px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-all duration-300 group"
+                href="https://wa.me/5585991872205?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20ToftSolutions."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-black px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-semibold text-sm hover:bg-gray-200 transition-all flex items-center gap-2"
               >
-                {item}
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-emerald-400 to-emerald-500 group-hover:w-3/4 transition-all duration-300 rounded-full"></span>
+                Falar com consultor <ArrowRight size={14} sm:size={16} />
               </a>
-            ))}
+            </div>
+            <div className="md:hidden">
+              <button
+                onClick={handleMenuClick}
+                className="text-white p-2 transition-all duration-300"
+                aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+              >
+                <div className="relative w-5 h-5">
+                  <span className={`absolute top-1 left-0 w-5 h-0.5 bg-white transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+                  <span className={`absolute top-3 left-0 w-5 h-0.5 bg-white transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}></span>
+                  <span className={`absolute top-5 left-0 w-5 h-0.5 bg-white transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
+                </div>
+              </button>
+            </div>
           </div>
-          <div className="hidden md:flex items-center gap-4 sm:gap-6">
-            <a
-              href="https://wa.me/5585991872205?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20ToftSolutions."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-black px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-semibold text-sm hover:bg-gray-200 transition-all flex items-center gap-2"
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        ref={menuRef}
+        className="fixed inset-0 z-40 md:hidden"
+        style={{ display: 'none' }}
+      >
+        {/* Background */}
+        <div
+          className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+          onClick={closeMenu}
+        />
+
+        {/* Menu Content */}
+        <div className="relative h-full flex flex-col">
+          {/* Minimal Header */}
+          <div className="flex items-center justify-end p-6 border-b border-white/10">
+            <button
+              onClick={closeMenu}
+              className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-all duration-300"
             >
-              Falar com consultor <ArrowRight size={14} sm:size={16} />
-            </a>
-          </div>
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white p-1.5 sm:p-2" aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}>
-              {isMenuOpen ? <X size={20} sm:size={24} /> : <Menu size={20} sm:size={24} />}
+              <X size={18} className="text-white/70 hover:text-white transition-colors" />
             </button>
+          </div>
+
+          {/* Menu Items */}
+          <div className="flex-1 px-6 py-8 overflow-y-auto custom-scrollbar">
+            {/* Navigation Section */}
+            <div className="mb-8">
+              <div className="space-y-1">
+                {menuItems.map((item, index) => (
+                  <div
+                    key={item.name}
+                    ref={el => menuItemsRef.current[index] = el}
+                    className="group"
+                  >
+                    <a
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all duration-300 group-hover:translate-x-1"
+                    >
+                      <span className="text-white text-lg font-medium group-hover:text-emerald-400 transition-colors duration-300">
+                        {item.name}
+                      </span>
+                      <ArrowRight size={18} className="text-gray-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all duration-300" />
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="my-6 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+
+            {/* Legal Section */}
+            <div className="mb-8">
+              <div className="space-y-1">
+                {legalItems.map((item, index) => (
+                  <div
+                    key={item.name}
+                    ref={el => menuItemsRef.current[index + menuItems.length] = el}
+                    className="group"
+                  >
+                    <button
+                      onClick={() => {
+                        item.action();
+                        closeMenu();
+                      }}
+                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all duration-300 group-hover:translate-x-1 w-full text-left"
+                    >
+                      <span className="text-gray-400 text-lg font-medium group-hover:text-emerald-400 transition-colors duration-300">
+                        {item.name}
+                      </span>
+                      <ArrowRight size={18} className="text-gray-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all duration-300" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* WhatsApp CTA */}
+            <div className="mt-auto px-6 pb-6">
+              <div
+                ref={el => menuItemsRef.current[menuItems.length + legalItems.length] = el}
+                className="group"
+              >
+                <a
+                  href="https://wa.me/5585991872205?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20ToftSolutions."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMenu}
+                  className="flex items-center justify-between p-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/30 transition-all duration-300 group-hover:scale-105"
+                >
+                  <div className="flex items-center gap-3">
+                    <MessageCircle size={20} className="text-emerald-400" />
+                    <span className="text-white text-lg font-medium">Falar no WhatsApp</span>
+                  </div>
+                  <ArrowRight size={18} className="text-emerald-400 group-hover:translate-x-1 transition-transform duration-300" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="p-4 border-t border-white/10">
+            <p className="text-gray-500 text-sm text-center">
+              © 2024 ToftSolutions
+            </p>
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 
