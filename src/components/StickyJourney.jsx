@@ -13,12 +13,12 @@ const StickyJourney = () => {
   };
 
   return (
-    <section className="relative bg-[#050505] py-20 lg:py-32">
+    <section className="sticky-journey relative bg-[#050505] py-12 sm:py-16 lg:py-20 xl:py-32">
        {/* Background Mesh */}
-       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none"></div>
-       
-       <div className="max-w-7xl mx-auto px-6 relative z-10">
-         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
+       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] sm:bg-[size:32px_32px] pointer-events-none"></div>
+
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+         <div className="flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-20 items-start">
            {/* Lado Esquerdo - Sticky Header */}
            <div className="hidden lg:flex lg:w-1/3 lg:h-screen lg:sticky lg:top-0 lg:pt-24 flex-col justify-center mb-12 lg:mb-0">
              <div className="space-y-6 pr-8">
@@ -32,21 +32,24 @@ const StickyJourney = () => {
                 <p className="text-gray-500 text-lg font-light leading-relaxed max-w-sm">
                   Uma experiência fluida onde cada interação é uma oportunidade de encantar. Acompanhe o fluxo.
                 </p>
-                
+
                 {/* Barra de Progresso Visual */}
                 <div className="w-px h-24 bg-gradient-to-b from-emerald-500 via-emerald-500/20 to-transparent mt-8"></div>
              </div>
            </div>
 
            {/* Mobile Header (Non-sticky) */}
-            <div className="lg:hidden mb-12 space-y-6 text-center">
+            <div className="lg:hidden mb-8 sm:mb-12 space-y-4 sm:space-y-6 text-center px-2 sm:px-0">
                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-medium uppercase tracking-widest mb-1">
                  <Zap size={10} className="fill-emerald-400" /> A Jornada Inteligente
                </div>
-               <h2 className="text-[2.2rem] leading-tight font-medium tracking-tight text-white">
+               <h2 className="journey-title text-xl sm:text-2xl md:text-[2.2rem] leading-tight font-medium tracking-tight text-white">
                  Seu atendimento, <br/>
-                 <span className="font-serif italic font-normal text-gray-400 block mt-2">reimaginado.</span>
+                 <span className="font-serif italic font-normal text-gray-400 block mt-1 sm:mt-2">reimaginado.</span>
                </h2>
+               <p className="text-gray-500 text-sm sm:text-base font-light leading-relaxed max-w-sm mx-auto mt-4">
+                 Uma experiência fluida onde cada interação é uma oportunidade de encantar. Acompanhe o fluxo.
+               </p>
             </div>
 
             {/* Lado Direito - Scrollable Cards */}

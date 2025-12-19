@@ -90,6 +90,31 @@ const App = () => {
           .hover-word-emerald { --hover-color: rgba(16,185,129,0.95); }
           .hover-word-blue { --hover-color: rgba(59,130,246,0.95); }
           .hover-word-white { --hover-color: rgba(255,255,255,0.98); }
+
+          /* Mobile optimizations */
+          @media (max-width: 480px) {
+            .hero-section { padding-top: 5rem !important; padding-bottom: 3rem !important; }
+            .hero-title { font-size: 1.5rem !important; line-height: 1.2 !important; }
+            .hero-copy { font-size: 0.9rem !important; line-height: 1.4 !important; }
+            .hero-buttons { gap: 0.75rem !important; }
+            .hero-buttons button { padding: 0.75rem 1rem !important; font-size: 0.85rem !important; }
+            .about-section { padding: 3rem 0 !important; }
+            .about-title { font-size: 1.5rem !important; line-height: 1.3 !important; }
+            .about-text { font-size: 0.9rem !important; line-height: 1.5 !important; }
+            .sticky-journey { padding: 3rem 0 !important; }
+            .journey-title { font-size: 1.25rem !important; }
+          }
+
+          @media (max-width: 640px) {
+            .hero-section { padding-top: 6rem !important; padding-bottom: 4rem !important; }
+            .hero-title { font-size: 1.75rem !important; }
+            .hero-copy { font-size: 1rem !important; }
+            .about-section { padding: 4rem 0 !important; }
+            .about-title { font-size: 1.75rem !important; }
+            .about-text { font-size: 1rem !important; }
+            .sticky-journey { padding: 4rem 0 !important; }
+            .journey-title { font-size: 1.5rem !important; }
+          }
           .page-grid-fade {
             position: absolute;
             inset-inline: 0;
