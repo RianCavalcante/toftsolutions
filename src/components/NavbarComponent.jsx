@@ -7,6 +7,7 @@ const NavbarComponent = () => {
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef(null);
   const menuItemsRef = useRef([]);
+  const scrollYRef = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -16,49 +17,65 @@ const NavbarComponent = () => {
 
   // Animações do menu mobile
   useEffect(() => {
-    if (isMenuOpen) {
+    if (isMenuOpen && menuRef.current) {
       // Animação de abertura do menu
-      gsap.set(menuRef.current, { display: 'block' });
       gsap.fromTo(menuRef.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.3, ease: 'power2.out' }
       );
 
       // Animação dos itens do menu
-      gsap.fromTo(menuItemsRef.current,
-        {
-          y: 30,
-          opacity: 0,
-          rotateX: -15
-        },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: 'power3.out',
-          delay: 0.2
-        }
-      );
-    } else {
-      // Animação de fechamento
-      gsap.to(menuItemsRef.current, {
-        y: -20,
-        opacity: 0,
-        rotateX: 15,
-        duration: 0.3,
-        stagger: 0.05,
-        ease: 'power2.in'
-      });
-
-      gsap.to(menuRef.current, {
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power2.in',
-        onComplete: () => gsap.set(menuRef.current, { display: 'none' })
-      });
+      if (menuItemsRef.current.length > 0) {
+        gsap.fromTo(menuItemsRef.current,
+          {
+            y: 30,
+            opacity: 0,
+            rotateX: -15
+          },
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power3.out',
+            delay: 0.2
+          }
+        );
+      }
     }
+  }, [isMenuOpen]);
+
+  // Lock background scroll when mobile menu is open
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    scrollYRef.current = window.scrollY || 0;
+    const body = document.body;
+    const html = document.documentElement;
+
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollYRef.current}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+    html.style.overflow = 'hidden';
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      html.style.overflow = '';
+      body.style.position = '';
+      body.style.top = '';
+      body.style.left = '';
+      body.style.right = '';
+      body.style.width = '';
+      window.scrollTo(0, scrollYRef.current);
+    };
   }, [isMenuOpen]);
 
   const handleMenuClick = () => {
@@ -134,11 +151,15 @@ const NavbarComponent = () => {
                 className="text-white p-2 transition-all duration-300"
                 aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
               >
-                <div className="relative w-5 h-5">
-                  <span className={`absolute top-1 left-0 w-5 h-0.5 bg-white transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
-                  <span className={`absolute top-3 left-0 w-5 h-0.5 bg-white transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}></span>
-                  <span className={`absolute top-5 left-0 w-5 h-0.5 bg-white transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
-                </div>
+                {isMenuOpen ? (
+                  <X size={22} />
+                ) : (
+                  <div className="relative w-5 h-5">
+                    <span className="absolute top-1 left-0 w-5 h-0.5 bg-white transition-all duration-300"></span>
+                    <span className="absolute top-3 left-0 w-5 h-0.5 bg-white transition-all duration-300"></span>
+                    <span className="absolute top-5 left-0 w-5 h-0.5 bg-white transition-all duration-300"></span>
+                  </div>
+                )}
               </button>
             </div>
           </div>
@@ -146,10 +167,10 @@ const NavbarComponent = () => {
       </nav>
 
       {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
       <div
         ref={menuRef}
-        className="fixed inset-0 z-40 md:hidden"
-        style={{ display: 'none' }}
+        className="fixed inset-0 z-[60] md:hidden"
       >
         {/* Background */}
         <div
@@ -158,14 +179,16 @@ const NavbarComponent = () => {
         />
 
         {/* Menu Content */}
-        <div className="relative h-full flex flex-col">
+        <div className="relative h-full flex flex-col" onClick={(e) => e.stopPropagation()}>
           {/* Minimal Header */}
-          <div className="flex items-center justify-end p-6 border-b border-white/10">
+          <div className="flex items-center justify-end p-5 border-b border-white/10 relative">
             <button
+              type="button"
               onClick={closeMenu}
-              className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-all duration-300"
+              className="w-10 h-10 rounded-lg hover:bg-white/10 active:bg-white/20 flex items-center justify-center transition-all duration-300 cursor-pointer" 
+              aria-label="Fechar menu"
             >
-              <X size={18} className="text-white/70 hover:text-white transition-colors" />
+              <X size={22} className="text-white" />
             </button>
           </div>
 
@@ -255,6 +278,7 @@ const NavbarComponent = () => {
           </div>
         </div>
       </div>
+      )}
     </>
   );
 };

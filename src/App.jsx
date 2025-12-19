@@ -34,7 +34,7 @@ const App = () => {
       preloader.classList.add('hidden');
       setTimeout(() => preloader.remove(), 500);
     }, 700) : null;
-
+    
     // Initialize Clarity
     clarity.init('ulyfx4cizz');
 
