@@ -103,18 +103,18 @@ const NavbarComponent = () => {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 sm:h-14 lg:h-16">
             <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer">
-                <svg width="160" height="36" viewBox="0 0 250 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-300 sm:w-[200px] sm:h-[44px] lg:w-[220px] lg:h-[52px]">
+                <svg viewBox="0 0 250 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[160px] h-[36px] sm:w-[200px] sm:h-[44px] lg:w-[220px] lg:h-[52px] group-hover:scale-105 transition-transform duration-300">
                   <defs>
                     <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#10b981" />
                       <stop offset="100%" stopColor="#059669" />
                     </linearGradient>
                   </defs>
-                  <rect x="0" y="10" width="35" height="35" rx="8" fill="url(#gradient1)" className="sm:w-[42px] sm:h-[42px] lg:w-[50px] lg:h-[50px]"/>
+                  <rect x="0" y="10" width="35" height="35" rx="8" fill="url(#gradient1)" />
                   {/* Ondas digitais */}
-                  <path d="M10 25 Q13 22, 17.5 25 T27.5 25" stroke="white" strokeWidth="1.5" fill="none" className="sm:stroke-2"/>
-                  <path d="M10 28 Q13 25, 17.5 28 T27.5 28" stroke="white" strokeWidth="1.5" fill="none" opacity="0.7" className="sm:stroke-2"/>
-                  <path d="M10 31 Q13 28, 17.5 31 T27.5 31" stroke="white" strokeWidth="1.5" fill="none" opacity="0.4" className="sm:stroke-2"/>
+                  <path d="M10 25 Q13 22, 17.5 25 T27.5 25" stroke="white" strokeWidth="1.5" fill="none" />
+                  <path d="M10 28 Q13 25, 17.5 28 T27.5 28" stroke="white" strokeWidth="1.5" fill="none" opacity="0.7" />
+                  <path d="M10 31 Q13 28, 17.5 31 T27.5 31" stroke="white" strokeWidth="1.5" fill="none" opacity="0.4" />
                   <text x="45" y="36" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '24px', fontWeight: 700, fill: 'white' }} className="sm:text-[28px] lg:text-[36px]">
                     Toft
                   </text>
