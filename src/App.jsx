@@ -5,6 +5,7 @@ import { CookieConsent } from './components/ui/CookieConsent';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { clarity } from 'react-microsoft-clarity';
+import ClickSpark from './components/ClickSpark';
 
 /* --- COMPONENTS --- */
 import NavbarComponent from './components/NavbarComponent';
@@ -74,7 +75,14 @@ const App = () => {
   }
 
   return (
-    <>
+    <ClickSpark
+      sparkColor="#fff"
+      sparkSize={10}
+      sparkRadius={15}
+      sparkCount={8}
+      duration={400}
+      style={{ minHeight: '100svh' }}
+    >
       <div className="min-h-[100svh] bg-[#000000] font-sans selection:bg-white/20 text-white">
         <style>{`
           .font-serif { font-family: 'Instrument Serif', serif; }
@@ -215,7 +223,7 @@ const App = () => {
       <CookieConsent onPrivacyClick={() => setCurrentView('privacy')} />
       <Analytics />
       <SpeedInsights />
-    </>
+    </ClickSpark>
   );
 };
 
