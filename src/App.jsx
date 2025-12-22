@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CookieConsent } from './components/ui/CookieConsent';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -22,8 +20,6 @@ const Footer = React.lazy(() => import('./components/Footer'));
 const TermsPage = React.lazy(() => import('./pages/LegalPages').then(module => ({ default: module.TermsPage })));
 const PrivacyPage = React.lazy(() => import('./pages/LegalPages').then(module => ({ default: module.PrivacyPage })));
 
-// Register GSAP Plugin
-gsap.registerPlugin(ScrollTrigger);
 
 const App = () => {
   const [currentView, setCurrentView] = useState('home'); // 'home', 'terms', 'privacy'

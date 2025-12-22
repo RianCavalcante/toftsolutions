@@ -1,13 +1,11 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
-import { Cover } from './ui/Cover';
-import { ShimmerText } from './ui/TypewriterEffect';
+import ShimmerText from './ui/ShimmerText';
 import { PremiumBackground } from './ui/PremiumBackground';
 import { HoverWord } from './ui/SharedEffects';
 import { usePrefersReducedMotion, useParallax } from '../hooks/useVisualEffects';
 
+const Cover = React.lazy(() => import('./ui/Cover').then((module) => ({ default: module.Cover || module.default })));
 const WhatsAppSimulator = React.lazy(() => import('./OriginalWhatsAppSimulator'));
 
 const HeroSection = () => {
@@ -17,26 +15,43 @@ const HeroSection = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useLayoutEffect(() => {
-    if (prefersReducedMotion) return;
-    if (!heroSectionRef.current) return;
+    if (prefersReducedMotion) return undefined;
+    if (!heroSectionRef.current) return undefined;
 
-    const ctx = gsap.context(() => {
-      const heroTitle = heroSectionRef.current?.querySelector('[data-anim="hero-title"]');
-      const heroCopy = heroSectionRef.current?.querySelector('[data-anim="hero-copy"]');
-      const heroCtas = heroSectionRef.current?.querySelector('[data-anim="hero-ctas"]');
-      const heroSim = heroSectionRef.current?.querySelector('[data-anim="hero-sim"]');
+    let ctx;
+    let isActive = true;
 
-      gsap.set([heroTitle, heroCopy, heroCtas, heroSim].filter(Boolean), { willChange: 'transform,opacity' });
+    const runAnimation = async () => {
+      const gsapModule = await import('gsap');
+      const scrollModule = await import('gsap/ScrollTrigger');
+      const gsap = gsapModule.gsap || gsapModule.default || gsapModule;
+      const ScrollTrigger = scrollModule.ScrollTrigger || scrollModule.default || scrollModule;
 
-      gsap.timeline({ defaults: { ease: 'power3.out' } })
-        .from(heroTitle, { y: 16, opacity: 0, duration: 0.7 })
-        .from(heroCopy, { y: 12, opacity: 0, duration: 0.6 }, '-=0.35')
-        .from(heroCtas, { y: 10, opacity: 0, duration: 0.55 }, '-=0.3')
-        .from(heroSim, { y: 16, opacity: 0, duration: 0.7 }, '-=0.35');
+      if (!isActive || !heroSectionRef.current) return;
+      gsap.registerPlugin(ScrollTrigger);
 
-    }, heroSectionRef);
+      ctx = gsap.context(() => {
+        const heroTitle = heroSectionRef.current?.querySelector('[data-anim="hero-title"]');
+        const heroCopy = heroSectionRef.current?.querySelector('[data-anim="hero-copy"]');
+        const heroCtas = heroSectionRef.current?.querySelector('[data-anim="hero-ctas"]');
+        const heroSim = heroSectionRef.current?.querySelector('[data-anim="hero-sim"]');
 
-    return () => ctx.revert();
+        gsap.set([heroTitle, heroCopy, heroCtas, heroSim].filter(Boolean), { willChange: 'transform,opacity' });
+
+        gsap.timeline({ defaults: { ease: 'power3.out' } })
+          .from(heroTitle, { y: 16, opacity: 0, duration: 0.7 })
+          .from(heroCopy, { y: 12, opacity: 0, duration: 0.6 }, '-=0.35')
+          .from(heroCtas, { y: 10, opacity: 0, duration: 0.55 }, '-=0.3')
+          .from(heroSim, { y: 16, opacity: 0, duration: 0.7 }, '-=0.35');
+      }, heroSectionRef);
+    };
+
+    runAnimation();
+
+    return () => {
+      isActive = false;
+      if (ctx) ctx.revert();
+    };
   }, [prefersReducedMotion]);
 
   return (
@@ -61,9 +76,11 @@ const HeroSection = () => {
                 aria-label="Alternar destaque do título principal"
               >
                 <HoverWord text="Atenda seus clientes em" className="hover-word-emerald" />{" "}
-                <Cover className="text-emerald-500">
-                  <HoverWord text="velocidade máxima" className="hover-word-white" />
-                </Cover>
+                <React.Suspense fallback={<span className="text-emerald-500"><HoverWord text="velocidade m?xima" className="hover-word-white" /></span>}>
+                  <Cover className="text-emerald-500">
+                    <HoverWord text="velocidade m?xima" className="hover-word-white" />
+                  </Cover>
+                </React.Suspense>
               </h1>
             </div>
             <p data-anim="hero-copy" className="hero-copy text-base sm:text-lg text-gray-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light overflow-hidden px-2 sm:px-0">

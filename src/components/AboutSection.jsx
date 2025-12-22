@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
 import { Award } from 'lucide-react';
 
 const AboutSection = () => {
@@ -24,7 +23,9 @@ const AboutSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const animateCards = () => {
+  const animateCards = async () => {
+    const gsapModule = await import('gsap');
+    const gsap = gsapModule.gsap || gsapModule.default || gsapModule;
     gsap.fromTo(
       cardsRef.current,
       {
@@ -46,7 +47,9 @@ const AboutSection = () => {
     );
   };
 
-  const animateCounters = () => {
+  const animateCounters = async () => {
+    const gsapModule = await import('gsap');
+    const gsap = gsapModule.gsap || gsapModule.default || gsapModule;
     const counters = document.querySelectorAll('.counter-value');
     counters.forEach((counter, index) => {
       const target = parseInt(counter.dataset.target);

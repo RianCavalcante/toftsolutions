@@ -1,6 +1,4 @@
 import React, { useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Zap, TrendingUp, ArrowRight } from 'lucide-react';
 
 const PremiumBenefitsSection = () => {
@@ -80,67 +78,85 @@ const PremiumBenefitsSection = () => {
   ];
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animate section title
-      gsap.fromTo(
-        ".benefits-title",
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%"
-          }
-        }
-      );
+    let ctx;
+    let isActive = true;
 
-      // Staggered cards animation
-      gsap.fromTo(
-        benefitsRef.current,
-        { y: 80, opacity: 0, scale: 0.9 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 60%"
-          }
-        }
-      );
+    const runAnimation = async () => {
+      const gsapModule = await import('gsap');
+      const scrollModule = await import('gsap/ScrollTrigger');
+      const gsap = gsapModule.gsap || gsapModule.default || gsapModule;
+      const ScrollTrigger = scrollModule.ScrollTrigger || scrollModule.default || scrollModule;
 
-      // Counter animation for metrics
-      countersRef.current.forEach((counter, idx) => {
-        const metric = benefits[idx].metric;
-        if (counter && !isNaN(parseInt(metric))) {
-          gsap.fromTo(
-            counter,
-            { innerText: 0 },
-            {
-              innerText: parseInt(metric),
-              duration: 2,
-              ease: "power2.out",
-              snap: { innerText: 1 },
-              scrollTrigger: {
-                trigger: counter,
-                start: "top 80%"
-              },
-              onUpdate: function() {
-                counter.innerText = Math.ceil(this.targets()[0].innerText) + (metric.includes('%') ? '%' : '');
-              }
+      if (!isActive) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      ctx = gsap.context(() => {
+        // Animate section title
+        gsap.fromTo(
+          ".benefits-title",
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%"
             }
-          );
-        }
-      });
-    });
+          }
+        );
 
-    return () => ctx.revert();
+        // Staggered cards animation
+        gsap.fromTo(
+          benefitsRef.current,
+          { y: 80, opacity: 0, scale: 0.9 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 60%"
+            }
+          }
+        );
+
+        // Counter animation for metrics
+        countersRef.current.forEach((counter, idx) => {
+          const metric = benefits[idx].metric;
+          if (counter && !isNaN(parseInt(metric))) {
+            gsap.fromTo(
+              counter,
+              { innerText: 0 },
+              {
+                innerText: parseInt(metric),
+                duration: 2,
+                ease: "power2.out",
+                snap: { innerText: 1 },
+                scrollTrigger: {
+                  trigger: counter,
+                  start: "top 80%"
+                },
+                onUpdate: function() {
+                  counter.innerText = Math.ceil(this.targets()[0].innerText) + (metric.includes('%') ? '%' : '');
+                }
+              }
+            );
+          }
+        });
+      });
+    };
+
+    runAnimation();
+
+    return () => {
+      isActive = false;
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (

@@ -1,6 +1,4 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Clock, Video, CheckCheck, Zap, X } from 'lucide-react';
 import { HoverWord } from './ui/SharedEffects';
 
@@ -10,38 +8,57 @@ const ScheduleSection = () => {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Reveal animation for section
-      gsap.utils.toArray('[data-anim="reveal"]').forEach((el) => {
-        gsap.from(el, {
-          opacity: 0,
-          y: 14,
-          duration: 0.7,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        });
-      });
+    let ctx;
+    let isActive = true;
 
-      // Card animation
-      gsap.utils.toArray('[data-anim="card"]').forEach((el) => {
-        gsap.from(el, {
-          opacity: 0,
-          y: 18,
-          duration: 0.75,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 88%',
-            toggleActions: 'play none none reverse',
-          },
+    const runAnimation = async () => {
+      const gsapModule = await import('gsap');
+      const scrollModule = await import('gsap/ScrollTrigger');
+      const gsap = gsapModule.gsap || gsapModule.default || gsapModule;
+      const ScrollTrigger = scrollModule.ScrollTrigger || scrollModule.default || scrollModule;
+
+      if (!isActive) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      ctx = gsap.context(() => {
+        // Reveal animation for section
+        gsap.utils.toArray('[data-anim="reveal"]').forEach((el) => {
+          gsap.from(el, {
+            opacity: 0,
+            y: 14,
+            duration: 0.7,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          });
         });
-      });
-    }, sectionRef);
-    return () => ctx.revert();
+
+        // Card animation
+        gsap.utils.toArray('[data-anim="card"]').forEach((el) => {
+          gsap.from(el, {
+            opacity: 0,
+            y: 18,
+            duration: 0.75,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 88%',
+              toggleActions: 'play none none reverse',
+            },
+          });
+        });
+      }, sectionRef);
+    };
+
+    runAnimation();
+
+    return () => {
+      isActive = false;
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (

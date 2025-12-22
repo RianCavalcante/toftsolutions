@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ArrowRight, MessageCircle } from 'lucide-react';
-import { gsap } from 'gsap';
 
 const NavbarComponent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,16 +16,21 @@ const NavbarComponent = () => {
 
   // Animações do menu mobile
   useEffect(() => {
-    if (isMenuOpen && menuRef.current) {
-      // Animação de abertura do menu
-      gsap.fromTo(menuRef.current,
+    if (!isMenuOpen || !menuRef.current) return;
+
+    const runAnimation = async () => {
+      const gsapModule = await import('gsap');
+      const gsap = gsapModule.gsap || gsapModule.default || gsapModule;
+
+      gsap.fromTo(
+        menuRef.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.3, ease: 'power2.out' }
       );
 
-      // Animação dos itens do menu
       if (menuItemsRef.current.length > 0) {
-        gsap.fromTo(menuItemsRef.current,
+        gsap.fromTo(
+          menuItemsRef.current,
           {
             y: 30,
             opacity: 0,
@@ -43,7 +47,9 @@ const NavbarComponent = () => {
           }
         );
       }
-    }
+    };
+
+    runAnimation();
   }, [isMenuOpen]);
 
   // Lock background scroll when mobile menu is open
