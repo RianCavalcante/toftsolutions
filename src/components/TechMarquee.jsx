@@ -24,10 +24,17 @@ const TechMarquee = () => {
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#000000] to-transparent z-10 pointer-events-none"></div>
       <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#000000] to-transparent z-10 pointer-events-none"></div>
       <div className="relative flex overflow-x-hidden group">
-        <div className="animate-marquee whitespace-nowrap flex items-center gap-24 px-10">
+        <div className="animate-marquee whitespace-nowrap flex items-center gap-24 px-10 will-change-transform">
           {[...techs, ...techs, ...techs].map((tech, index) => (
             <div key={index} className="flex items-center gap-4 group/item cursor-default opacity-60 hover:opacity-100 transition-opacity duration-300">
-               <img src={tech.url} alt={tech.name} width={32} height={32} className="w-8 h-8 object-contain filter grayscale group-hover/item:grayscale-0 transition-all duration-300" />
+               <img 
+                 src={tech.url} 
+                 alt={tech.name} 
+                 width={32} 
+                 height={32} 
+                 loading="lazy" 
+                 className="w-8 h-8 object-contain filter grayscale group-hover/item:grayscale-0 transition-all duration-300" 
+               />
                <span className="text-lg font-sans font-semibold tracking-tight text-gray-400 group-hover/item:text-white transition-colors duration-300">{tech.name}</span>
             </div>
           ))}

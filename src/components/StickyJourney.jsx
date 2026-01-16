@@ -1,17 +1,71 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Zap, Clock, Cpu, TrendingUp, Lock, CheckCheck } from 'lucide-react';
 
-const StickyJourney = () => {
-  const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
+const JourneyCard = ({ item }) => {
+  const cardRef = useRef(null);
+  const spotlightRef = useRef(null);
 
-  const handleMouseMove = (e, cardRef) => {
-    const rect = cardRef.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+  const handleMouseMove = (e) => {
+    if (!cardRef.current || !spotlightRef.current) return;
+
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Direct DOM manipulation for 0 re-renders
+    spotlightRef.current.style.background = `radial-gradient(600px circle at ${x}px ${y}px, rgba(16,185,129,0.06), transparent 40%)`;
   };
 
+  return (
+    <div className="relative pl-20 lg:pl-28 group">
+      {/* Nó da linha do tempo */}
+      <div className="absolute left-[30px] lg:left-[46px] top-0 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-emerald-500/30 bg-[#050505] group-hover:bg-emerald-500 group-hover:scale-125 transition-all duration-500 z-10 flex items-center justify-center">
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      </div>
+
+      {/* Card Content */}
+      <div 
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-6 sm:p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden min-h-[280px] sm:min-h-[320px] flex flex-col justify-center will-change-transform"
+      >
+         {/* Dynamic Spotlight Effect - Optimized */}
+         <div 
+           ref={spotlightRef}
+           className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+           style={{
+             background: `radial-gradient(600px circle at 0px 0px, rgba(16,185,129,0.06), transparent 40%)`
+           }}
+         ></div>
+
+         <div className="relative z-10">
+           <div className="flex justify-between items-start mb-6">
+             <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-500">
+               <item.icon size={26} className="text-gray-400 group-hover:text-emerald-400 transition-colors" />
+             </div>
+             <span className="text-5xl font-bold text-white/[0.03] group-hover:text-emerald-500/[0.05] transition-colors font-serif select-none pointer-events-none">
+               {item.step}
+             </span>
+           </div>
+
+           <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">{item.title}</h3>
+           <span className="text-xs font-mono uppercase tracking-wider text-emerald-600/80 mb-4 block">{item.subtitle}</span>
+           
+           <p className="text-gray-400 leading-relaxed font-light mb-6 group-hover:text-gray-300 transition-colors">
+             {item.desc}
+           </p>
+
+           {/* Highlight Pills */}
+           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs font-medium text-emerald-400/80 mt-2 hover:bg-emerald-500/10 transition-colors cursor-default">
+             <CheckCheck size={12} /> <span dangerouslySetInnerHTML={{__html: item.highlight}}></span>
+           </div>
+         </div>
+      </div>
+    </div>
+  );
+};
+
+const StickyJourney = () => {
   return (
     <section className="sticky-journey relative bg-[#050505] py-12 sm:py-16 lg:py-20 xl:py-32">
        {/* Background Mesh */}
@@ -94,56 +148,9 @@ const StickyJourney = () => {
                   highlight: "Criptografia Ponta-a-Ponta",
                   color: "orange"
                 }
-              ].map((item, idx) => {
-                const cardRef = React.useRef(null);
-                return (
-                  <div key={idx} className="relative pl-20 lg:pl-28 group">
-                    {/* Nó da linha do tempo */}
-                    <div className="absolute left-[30px] lg:left-[46px] top-0 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-emerald-500/30 bg-[#050505] group-hover:bg-emerald-500 group-hover:scale-125 transition-all duration-500 z-10 flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </div>
-
-                    {/* Card Content */}
-                    <div 
-                      ref={cardRef}
-                      onMouseMove={(e) => handleMouseMove(e, cardRef.current)}
-                      data-anim="sticky-card"
-                      className="relative bg-[#0A0A0A] border border-white/5 hover:border-emerald-500/30 p-6 sm:p-8 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] group-hover:bg-white/[0.015] overflow-hidden min-h-[280px] sm:min-h-[320px] flex flex-col justify-center"
-                    >
-                       {/* Dynamic Spotlight Effect */}
-                       <div 
-                         className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                         style={{
-                           background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(16,185,129,0.06), transparent 40%)`
-                         }}
-                       ></div>
-
-                       <div className="relative z-10">
-                         <div className="flex justify-between items-start mb-6">
-                           <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-500">
-                             <item.icon size={26} className="text-gray-400 group-hover:text-emerald-400 transition-colors" />
-                           </div>
-                           <span className="text-5xl font-bold text-white/[0.03] group-hover:text-emerald-500/[0.05] transition-colors font-serif select-none pointer-events-none">
-                             {item.step}
-                           </span>
-                         </div>
-
-                         <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">{item.title}</h3>
-                         <span className="text-xs font-mono uppercase tracking-wider text-emerald-600/80 mb-4 block">{item.subtitle}</span>
-                         
-                         <p className="text-gray-400 leading-relaxed font-light mb-6 group-hover:text-gray-300 transition-colors">
-                           {item.desc}
-                         </p>
-
-                         {/* Highlight Pills */}
-                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs font-medium text-emerald-400/80 mt-2 hover:bg-emerald-500/10 transition-colors cursor-default">
-                           <CheckCheck size={12} /> <span dangerouslySetInnerHTML={{__html: item.highlight}}></span>
-                         </div>
-                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+              ].map((item, idx) => (
+                <JourneyCard key={idx} item={item} />
+              ))}
            </div>
          </div>
        </div>
