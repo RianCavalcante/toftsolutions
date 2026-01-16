@@ -76,9 +76,9 @@ const HeroSection = () => {
                 aria-label="Alternar destaque do título principal"
               >
                 <HoverWord text="Atenda seus clientes em" className="hover-word-emerald" />{" "}
-                <React.Suspense fallback={<span className="text-emerald-500"><HoverWord text="velocidade m?xima" className="hover-word-white" /></span>}>
+                <React.Suspense fallback={<span className="text-emerald-500"><HoverWord text="velocidade máxima" className="hover-word-white" /></span>}>
                   <Cover className="text-emerald-500">
-                    <HoverWord text="velocidade m?xima" className="hover-word-white" />
+                    <HoverWord text="velocidade máxima" className="hover-word-white" />
                   </Cover>
                 </React.Suspense>
               </h1>

@@ -109,7 +109,7 @@ const NavbarComponent = () => {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 sm:h-14 lg:h-16">
             <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer">
-                <svg viewBox="0 0 250 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[160px] h-[36px] sm:w-[200px] sm:h-[44px] lg:w-[220px] lg:h-[52px] group-hover:scale-105 transition-transform duration-300">
+                <svg viewBox="0 0 300 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[216px] h-[36px] sm:w-[264px] sm:h-[44px] lg:w-[312px] lg:h-[52px] group-hover:scale-105 transition-transform duration-300">
                   <defs>
                     <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#10b981" />
